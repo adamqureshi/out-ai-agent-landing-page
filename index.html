@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="OUT AI Agent installs on your dealership website to sell Teslas from your live inventory feed and capture more leads—24/7." />
+
+  <title>OUT AI Agent — The AI sales assistant for Tesla dealerships</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="OUT AI Agent — The AI sales assistant for Tesla dealerships" />
+  <meta property="og:description" content="Answer questions, recommend the right Tesla, capture leads, and even source Teslas from private sellers." />
+  <meta property="og:type" content="website" />
+
+  <link rel="icon" href="favicon.ico" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Top glow background (pure CSS) -->
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="#">
+        <span class="brand-mark" aria-hidden="true">◈</span>
+        <span class="brand-name">OnlyUsedTesla<span class="brand-dot">.ai</span></span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="navMenu">
+        <span class="sr-only">Open menu</span>
+        <span class="nav-toggle-bars" aria-hidden="true"></span>
+      </button>
+
+      <div class="nav-menu" id="navMenu">
+        <a class="nav-link" href="#product">Product</a>
+        <a class="nav-link" href="#how">How it works</a>
+        <a class="nav-link" href="#pricing">Pricing</a>
+        <a class="nav-link" href="#faq">FAQ</a>
+
+        <div class="nav-cta">
+          <a class="btn btn-nav" href="/signup">Sign up</a>
+          <a class="btn btn-ghost" href="/signin">Sign in</a>
+        </div>
+      </div>
+    </nav>
+
+    <section class="hero" id="top">
+      <div class="hero-copy">
+        <p class="eyebrow">AI agent for dealerships with Tesla inventory</p>
+
+        <h1 class="hero-title">
+          Sell more Teslas from your website — <span class="accent">automatically</span>.
+        </h1>
+
+        <p class="hero-subtitle">
+          <strong>OUT AI Agent</strong> installs on your dealership site to answer shopper questions, recommend vehicles
+          from your <em>live inventory feed</em>, capture leads, and route hot buyers to your team.
+          It can also help you <strong>source Teslas from private sellers</strong> by collecting trade-in details and requests to sell.
+        </p>
+
+        <ul class="hero-bullets" role="list">
+          <li>Works on mobile (where most shoppers are)</li>
+          <li>Install + inventory feed connection handled by us</li>
+          <li>Cancel anytime — month to month</li>
+        </ul>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#demo">See a demo</a>
+          <a class="btn btn-ghost" href="#pricing">View pricing</a>
+        </div>
+
+        <p class="hero-fineprint">
+          Not affiliated with Tesla, Inc. “Tesla” is used to describe inventory.
+        </p>
+      </div>
+
+      <div class="hero-demo" aria-label="Product demo preview">
+        <div class="demo-card">
+          <div class="demo-card-top">
+            <div class="demo-badge">
+              <span class="demo-dot" aria-hidden="true"></span>
+              Live preview
+            </div>
+
+            <div class="demo-actions">
+              <button class="icon-btn" type="button" data-open-chat title="Open chat demo" aria-label="Open chat demo">
+                <span aria-hidden="true">↗</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="demo-embed" id="demoEmbed" aria-label="Embed area">
+            <!--
+              Embed your video/animation here.
+              Example:
+              <iframe src="https://..." title="OUT AI Agent demo" loading="lazy"></iframe>
+            -->
+            <div class="demo-placeholder">
+              <p><strong>Demo spot</strong></p>
+              <p>Embed your UI animation/video here.</p>
+              <p class="muted">Recommended: 9:16 or 4:5 aspect ratio for mobile.</p>
+            </div>
+          </div>
+
+          <div class="chat-preview" aria-hidden="true">
+            <div class="chat-preview-header">
+              <span class="chat-preview-title">OUT • AI Agent</span>
+              <span class="chat-preview-pill">Dealership site</span>
+            </div>
+
+            <div class="chat-preview-body" id="chatPreviewBody">
+              <!-- Filled by script.js -->
+            </div>
+
+            <div class="chat-preview-footer">
+              <div class="chat-input-fake">
+                Ask about inventory, financing, trade-ins…
+              </div>
+              <div class="chat-send-fake" aria-hidden="true">➤</div>
+            </div>
+          </div>
+        </div>
+
+        <p class="demo-caption">
+          This is a lightweight front-end preview. Your developer can connect the widget to Azure APIs.
+        </p>
+      </div>
+    </section>
+  </header>
+
+  <main id="main">
+    <section class="section" id="product">
+      <div class="container">
+        <div class="section-head">
+          <h2>What OUT AI Agent does</h2>
+          <p>
+            Built for dealerships that live and die by speed-to-lead. OUT answers instantly, stays on-brand,
+            and moves shoppers toward a test drive.
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <article class="card">
+            <h3>Sell from your live inventory</h3>
+            <p>
+              Connect your inventory feed (CSV/XML/API). OUT can recommend vehicles, compare trims,
+              explain options, and link buyers to the exact listing.
+            </p>
+            <ul class="checklist" role="list">
+              <li>Availability + specs</li>
+              <li>Payments &amp; estimated monthly ranges</li>
+              <li>Trade-in + financing questions</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>Capture leads you can close</h3>
+            <p>
+              OUT collects contact details, purchase intent, timing, and preferred vehicles — then routes the lead
+              to your team with a clean summary.
+            </p>
+            <ul class="checklist" role="list">
+              <li>Name, email, phone</li>
+              <li>Desired model/year/budget</li>
+              <li>Appointment / callback requests</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>Help you buy Teslas from private sellers</h3>
+            <p>
+              Turn “I’m thinking of selling my Tesla” into acquisition opportunities. OUT can collect the details your
+              desk needs to make an offer.
+            </p>
+            <ul class="checklist" role="list">
+              <li>VIN, mileage, condition</li>
+              <li>Photos upload (optional)</li>
+              <li>Seller contact + location</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="how">
+      <div class="container">
+        <div class="section-head">
+          <h2>How it works</h2>
+          <p>Simple install. No redesign required. Your dev can keep everything on Azure.</p>
+        </div>
+
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div>
+              <h3>Install the widget</h3>
+              <p>We add a small script tag to your website (or your developer does). It loads fast and works on mobile.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">2</div>
+            <div>
+              <h3>Connect your inventory feed</h3>
+              <p>Send your feed (or endpoint). OUT indexes your listings so it can answer questions with real inventory.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">3</div>
+            <div>
+              <h3>Go live + route leads</h3>
+              <p>Choose where leads go (email, CRM, SMS). Track conversations and see what shoppers are asking.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout">
+          <div class="callout-inner">
+            <h3>Designed for sales, not “support.”</h3>
+            <p>
+              Your shoppers don’t want to “open a ticket.” They want to know: <em>Is it available?</em>
+              <em>What’s the payment?</em> <em>Can I see it today?</em>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="integrations">
+      <div class="container">
+        <div class="section-head">
+          <h2>Fits your current stack</h2>
+          <p>Use what you already have. Add integrations later.</p>
+        </div>
+
+        <div class="grid-2">
+          <article class="card">
+            <h3>Inventory</h3>
+            <p class="muted">CSV • XML • API • Dealer feeds</p>
+            <p>
+              OUT can ingest your inventory feed and keep the chat recommendations current.
+              Your team controls what’s published.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Lead routing</h3>
+            <p class="muted">Email • CRM • SMS (optional)</p>
+            <p>
+              Send hot leads to the right person, with context: vehicle, budget, timeline, and key questions asked.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="pricing">
+      <div class="container">
+        <div class="section-head">
+          <h2>Pricing that makes sense for dealerships</h2>
+          <p>
+            A single closed deal can pay for months. Start simple, then scale up as you add rooftops and volume.
+          </p>
+        </div>
+
+        <div class="pricing-grid">
+          <article class="price-card">
+            <div class="price-head">
+              <h3>Starter</h3>
+              <p class="muted">Best for 1 rooftop</p>
+            </div>
+
+            <p class="price">
+              <span class="price-amount">$499</span>
+              <span class="price-unit">/ month</span>
+            </p>
+
+            <p class="price-sub">
+              + <strong>$499</strong> one-time setup (feed + install). Cancel anytime.
+            </p>
+
+            <ul class="checklist" role="list">
+              <li>1 website domain</li>
+              <li>1 inventory feed</li>
+              <li>Lead capture + summaries</li>
+              <li>Basic analytics</li>
+            </ul>
+
+            <a class="btn btn-primary w-full" href="#demo">Book a demo</a>
+          </article>
+
+          <article class="price-card featured">
+            <div class="badge">Most popular</div>
+
+            <div class="price-head">
+              <h3>Growth</h3>
+              <p class="muted">More volume + acquisition</p>
+            </div>
+
+            <p class="price">
+              <span class="price-amount">$899</span>
+              <span class="price-unit">/ month</span>
+            </p>
+
+            <p class="price-sub">
+              + <strong>$499</strong> setup. Multi-rooftop support &amp; private-seller intake.
+            </p>
+
+            <ul class="checklist" role="list">
+              <li>Up to 3 rooftops</li>
+              <li>Inventory recommendations + comparisons</li>
+              <li>Private seller “sell my Tesla” intake</li>
+              <li>Priority support</li>
+            </ul>
+
+            <a class="btn btn-primary w-full" href="#demo">Book a demo</a>
+          </article>
+
+          <article class="price-card">
+            <div class="price-head">
+              <h3>Enterprise</h3>
+              <p class="muted">Groups + custom integrations</p>
+            </div>
+
+            <p class="price">
+              <span class="price-amount">Custom</span>
+              <span class="price-unit">&nbsp;</span>
+            </p>
+
+            <p class="price-sub">
+              SSO, custom routing, dedicated environments, advanced compliance.
+            </p>
+
+            <ul class="checklist" role="list">
+              <li>Unlimited rooftops</li>
+              <li>Custom CRM / DMS integration</li>
+              <li>Security reviews + SLAs</li>
+              <li>Dedicated support</li>
+            </ul>
+
+            <a class="btn btn-ghost w-full" href="#demo">Talk to sales</a>
+          </article>
+        </div>
+
+        <p class="pricing-footnote">
+          Tip: If you’re early-stage, consider a “Founding Dealer” offer (e.g., $399/mo for the first 10 dealers) to close faster.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" id="demo">
+      <div class="container">
+        <div class="section-head">
+          <h2>Get a dealer demo</h2>
+          <p>
+            Drop your details and we’ll follow up. (Your developer can wire this form to Azure / a CRM endpoint.)
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <form class="form card" id="leadForm" autocomplete="on">
+            <div class="form-row">
+              <label>
+                <span>Name</span>
+                <input name="name" type="text" placeholder="Your name" required />
+              </label>
+
+              <label>
+                <span>Dealership</span>
+                <input name="dealership" type="text" placeholder="Dealership name" required />
+              </label>
+            </div>
+
+            <div class="form-row">
+              <label>
+                <span>Email</span>
+                <input name="email" type="email" placeholder="you@dealership.com" required />
+              </label>
+
+              <label>
+                <span>Phone (optional)</span>
+                <input name="phone" type="tel" placeholder="(555) 555-5555" />
+              </label>
+            </div>
+
+            <label>
+              <span>Website</span>
+              <input name="website" type="url" placeholder="https://…" />
+            </label>
+
+            <label>
+              <span>Inventory feed type (optional)</span>
+              <select name="feed">
+                <option value="">Select one</option>
+                <option>CSV</option>
+                <option>XML</option>
+                <option>API endpoint</option>
+                <option>Not sure yet</option>
+              </select>
+            </label>
+
+            <label>
+              <span>What are you trying to achieve?</span>
+              <textarea name="notes" rows="4" placeholder="More leads, faster responses, buying from private sellers…"></textarea>
+            </label>
+
+            <button class="btn btn-primary" type="submit">Request demo</button>
+            <p class="form-note muted" id="formNote" aria-live="polite"></p>
+          </form>
+
+          <div class="card">
+            <h3>What you’ll see on the demo</h3>
+            <ul class="checklist" role="list">
+              <li>Inventory Q&amp;A (availability, specs, comparisons)</li>
+              <li>Lead capture + clean handoff summary</li>
+              <li>Private-seller intake flow (VIN/mileage/condition)</li>
+              <li>Admin settings (tone, policies, disclaimers)</li>
+            </ul>
+
+            <div class="mini-callout">
+              <p class="muted">
+                Want it super simple? Start with website chat + inventory feed. Add SMS/CRM later.
+              </p>
+              <button class="btn btn-ghost" type="button" data-open-chat>Try the chat preview</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="faq">
+      <div class="container">
+        <div class="section-head">
+          <h2>FAQ</h2>
+          <p>Quick answers for dealers.</p>
+        </div>
+
+        <div class="faq">
+          <details class="faq-item">
+            <summary>How do you connect to our inventory?</summary>
+            <div class="faq-body">
+              We can ingest a CSV/XML feed or call an API endpoint you provide. The agent uses that data to recommend
+              vehicles and answer availability/spec questions. Your team stays in control of what’s published.
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Does it replace our salespeople?</summary>
+            <div class="faq-body">
+              No — it handles the repetitive questions and qualifies leads so your team spends time with serious buyers.
+              You choose when OUT hands off to a human.
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Can it help us buy cars from private sellers?</summary>
+            <div class="faq-body">
+              Yes. You can enable a “Sell my Tesla” flow that collects VIN, mileage, condition, photos (optional), and contact details.
+              Your team can then follow up with an offer.
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>What about compliance and disclaimers?</summary>
+            <div class="faq-body">
+              You can configure disclaimers (pricing estimates, availability, financing terms). We recommend clear “subject to change”
+              language and human review for final offers.
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Can my developer host the backend on Azure?</summary>
+            <div class="faq-body">
+              Yes. This landing page is static. Your developer can keep the API, inventory sync, and lead routing on Azure.
+              The widget can call your Azure endpoints.
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <a class="brand footer-brand" href="#top">
+          <span class="brand-mark" aria-hidden="true">◈</span>
+          <span class="brand-name">OnlyUsedTesla<span class="brand-dot">.ai</span></span>
+        </a>
+        <p class="muted">
+          OUT AI Agent helps dealerships sell and acquire Teslas with a fast, mobile-first AI chat experience.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="#product">Product</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#demo">Demo</a>
+        <a href="/signup">Sign up</a>
+        <a href="/signin">Sign in</a>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <p class="muted small">
+        © <span id="year"></span> OnlyUsedTesla.ai. Not affiliated with Tesla, Inc.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Sticky chat launcher -->
+  <button class="chat-launcher" type="button" data-open-chat aria-label="Open chat">
+    <span class="chat-launcher-dot" aria-hidden="true"></span>
+    Ask OUT anything
+    <span class="chat-launcher-arrow" aria-hidden="true">↗</span>
+  </button>
+
+  <!-- Chat drawer (front-end demo only) -->
+  <div class="chat-drawer" id="chatDrawer" aria-hidden="true">
+    <div class="chat-drawer-backdrop" data-close-chat></div>
+
+    <div class="chat-window" role="dialog" aria-modal="true" aria-label="Chat demo">
+      <div class="chat-window-header">
+        <div class="chat-window-title">
+          <span class="chat-avatar" aria-hidden="true">◈</span>
+          <div>
+            <div class="chat-title">OUT AI Agent</div>
+            <div class="chat-subtitle muted">Demo chat (no backend)</div>
+          </div>
+        </div>
+
+        <button class="icon-btn" type="button" data-close-chat aria-label="Close chat">✕</button>
+      </div>
+
+      <div class="chat-window-body" id="chatBody" aria-live="polite"></div>
+
+      <form class="chat-window-footer" id="chatForm">
+        <label class="sr-only" for="chatInput">Message</label>
+        <input id="chatInput" name="message" type="text" placeholder="Ask: “Do you have a Model Y under $35k?”" autocomplete="off" />
+        <button class="btn btn-primary" type="submit">Send</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
