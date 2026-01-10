@@ -39,11 +39,11 @@
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const previewScript = [
-    { from: "out", text: "Hey! Looking for a used Tesla today?" },
+    { from: "out", text: "Hi! Want to shop for a Tesla — or sell one?" },
     { from: "in", text: "Do you have a Model Y under $35k?" },
-    { from: "out", text: "Yes — I can show options from your live inventory. Any preference on year, mileage, or color?" },
+    { from: "out", text: "Yes — I can pull options from your live inventory. Any preference on year, mileage, or color?" },
     { from: "in", text: "2021+ and under 50k miles." },
-    { from: "out", text: "Got it. Want to book a test drive for this afternoon or tomorrow?" },
+    { from: "out", text: "Perfect. Want to book a test drive for today or tomorrow?" },
   ];
 
   function bubbleEl(from, text) {
