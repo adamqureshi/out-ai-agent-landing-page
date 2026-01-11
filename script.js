@@ -1,260 +1,399 @@
-/* OUT AI Agent — static landing interactions (no backend) */
-(function(){
+(() => {
   const $ = (sel, root=document) => root.querySelector(sel);
   const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
 
-  // Mobile nav
-  const burger = $('.nav-burger');
-  const mobileMenu = $('#mobileMenu');
-  if (burger && mobileMenu){
-    burger.addEventListener('click', () => {
-      const expanded = burger.getAttribute('aria-expanded') === 'true';
-      burger.setAttribute('aria-expanded', String(!expanded));
-      mobileMenu.hidden = expanded;
+  // -----------------------------
+  // Demo card selection
+  // -----------------------------
+  const cards = $$(".demo-card");
+  const selectedLabel = $("#selectedLabel");
+  const preferredDemo = $("#preferredDemo");
+
+  function setSelected(kind) {
+    cards.forEach(card => {
+      const isSelected = card.dataset.demo === kind;
+      card.classList.toggle("selected", isSelected);
+      card.setAttribute("aria-pressed", isSelected ? "true" : "false");
     });
-    $$('#mobileMenu a').forEach(a => a.addEventListener('click', () => {
-      burger.setAttribute('aria-expanded', 'false');
-      mobileMenu.hidden = true;
-    }));
+
+    const label = kind === "voice" ? "Voice AI Agent" : "Chat AI Agent";
+    if (selectedLabel) selectedLabel.textContent = label;
+
+    if (preferredDemo) preferredDemo.value = kind;
+
+    try { localStorage.setItem("out_demo_preference", kind); } catch {}
   }
 
-  // Demo selection highlight
-  const selectedLabel = $('#selectedDemoLabel');
-  const cards = $$('.product-card[data-demo]');
-  function selectCard(type){
-    cards.forEach(c => c.classList.toggle('product-card--selected', c.dataset.demo === type));
-    if (selectedLabel) selectedLabel.textContent = type === 'voice' ? 'Voice AI Agent' : 'Chat AI Agent';
+  // Restore selection
+  try {
+    const saved = localStorage.getItem("out_demo_preference");
+    if (saved === "voice" || saved === "chat") setSelected(saved);
+    else setSelected("chat");
+  } catch {
+    setSelected("chat");
   }
+
   cards.forEach(card => {
-    card.addEventListener('click', () => selectCard(card.dataset.demo));
-    card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' '){
+    card.addEventListener("click", (e) => {
+      // ignore clicks on buttons/links inside the card
+      const target = e.target;
+      if (target && (target.closest("button") || target.closest("a"))) return;
+      setSelected(card.dataset.demo);
+    });
+
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        selectCard(card.dataset.demo);
+        setSelected(card.dataset.demo);
       }
     });
   });
 
-  // Chat drawer
-  const chatDrawer = $('#chatDrawer');
-  const chatBody = $('#chatBody');
-  const chatForm = $('#chatForm');
-  const chatText = $('#chatText');
+  // -----------------------------
+  // Chat drawer (front-end preview)
+  // -----------------------------
+  const launcher = $("#launcher");
+  const chatDrawer = $("#chatDrawer");
+  const chatMessages = $("#chatMessages");
+  const chatForm = $("#chatForm");
+  const chatInput = $("#chatInput");
+  const openChatButtons = $$("[data-open-chat]");
+  const closeDrawerButtons = $$("[data-close-drawer]");
 
-  function openChat(){
+  function openChat() {
     if (!chatDrawer) return;
     chatDrawer.hidden = false;
-    // focus input
-    setTimeout(() => chatText && chatText.focus(), 50);
-    // reflect selection
-    selectCard('chat');
+    setTimeout(() => chatInput?.focus(), 50);
   }
-  function closeChat(){
+  function closeChat() {
     if (!chatDrawer) return;
     chatDrawer.hidden = true;
   }
-  $$('[data-open-chat]').forEach(btn => btn.addEventListener('click', openChat));
-  $$('[data-close-chat]').forEach(btn => btn.addEventListener('click', closeChat));
 
-  // Simple chat responder (placeholder)
-  function respondToChat(text){
-    const t = text.toLowerCase();
-    if (t.includes('model y')) return "Yes — I can show Model Y options in stock. What year range and budget are you aiming for?";
-    if (t.includes('model 3')) return "Got it. Are you looking for Standard Range, Long Range, or Performance?";
-    if (t.includes('trade')) return "Sure — I can estimate trade-in ranges. What’s the year/mileage and condition?";
-    if (t.includes('sell') || t.includes('selling')) return "I can help intake a private-seller Tesla. What’s the VIN (or year/model), mileage, and your location?";
-    if (t.includes('payment') || t.includes('monthly')) return "I can estimate monthly payments. What price target, down payment, and credit tier should I assume?";
-    return "Got it. I can help with inventory questions, comparisons, test drive requests, or seller intake. What’s the Tesla you’re interested in?";
-  }
-  function addChatMsg(role, text){
-    if (!chatBody) return;
-    const div = document.createElement('div');
-    div.className = 'msg ' + role;
+  launcher?.addEventListener("click", openChat);
+  openChatButtons.forEach(btn => btn.addEventListener("click", openChat));
+  closeDrawerButtons.forEach(btn => btn.addEventListener("click", closeChat));
+
+  chatDrawer?.addEventListener("click", (e) => {
+    // click outside? (not implemented — drawer is anchored)
+  });
+
+  function addMsg(text, who="ai") {
+    if (!chatMessages) return;
+    const div = document.createElement("div");
+    div.className = `msg ${who}`;
     div.textContent = text;
-    chatBody.appendChild(div);
-    chatBody.scrollTop = chatBody.scrollHeight;
-  }
-  if (chatForm){
-    chatForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const text = (chatText?.value || '').trim();
-      if (!text) return;
-      addChatMsg('user', text);
-      chatText.value = '';
-      window.setTimeout(() => addChatMsg('ai', respondToChat(text)), 260);
-    });
+    chatMessages.appendChild(div);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 
-  // Voice modal
-  const voiceModal = $('#voiceModal');
-  const voiceStatus = $('#voiceStatus');
-  const voiceSupportNote = $('#voiceSupportNote');
-  const transcript = $('#voiceTranscript');
-  const voiceStartBtn = $('#voiceStartBtn');
-  const voiceStopBtn = $('#voiceStopBtn');
-  const speakToggle = $('#voiceSpeakToggle');
-  const manualText = $('#voiceManualText');
-  const manualSend = $('#voiceManualSend');
+  chatForm?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const val = (chatInput?.value || "").trim();
+    if (!val) return;
+    addMsg(val, "user");
+    chatInput.value = "";
 
-  function openVoice(){
+    // lightweight mocked response
+    const response = mockChatResponse(val);
+    setTimeout(() => addMsg(response, "ai"), 350);
+  });
+
+  function mockChatResponse(userText) {
+    const t = userText.toLowerCase();
+    if (t.includes("model y") && (t.includes("under") || t.includes("$"))) {
+      return "Got it. What year range and mileage are you targeting? I can show in-stock options and estimate payments.";
+    }
+    if (t.includes("sell") && t.includes("tesla")) {
+      return "Sure — I can help with that. What’s the VIN and mileage? Any notes on condition?";
+    }
+    if (t.includes("trade") || t.includes("trade-in")) {
+      return "Yes — we can discuss trade-in. What are you trading in (year/make/model) and your rough mileage?";
+    }
+    if (t.includes("financ") || t.includes("payment")) {
+      return "I can estimate payments. What’s your budget, credit range (optional), and down payment?";
+    }
+    return "Thanks — I can help. What model/year budget are you looking for, and do you want AWD or Long Range?";
+  }
+
+  // Close with Esc
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      if (chatDrawer && !chatDrawer.hidden) closeChat();
+      if (voiceModal && !voiceModal.hidden) closeVoice();
+    }
+  });
+
+  // -----------------------------
+  // Voice demo modal (browser-only)
+  // -----------------------------
+  const openVoiceButtons = $$("[data-open-voice]");
+  const voiceModal = $("#voiceModal");
+  const closeVoiceButtons = $$("[data-close-voice]");
+  const voiceStatus = $("#voiceStatus");
+  const voiceLog = $("#voiceLog");
+  const startVoiceBtn = $("#startVoiceBtn");
+  const stopVoiceBtn = $("#stopVoiceBtn");
+  const ttsToggle = $("#ttsToggle");
+  const voiceTextForm = $("#voiceTextForm");
+  const voiceTextInput = $("#voiceTextInput");
+
+  let recognition = null;
+  let recognizing = false;
+
+  function setVoiceStatus(s) {
+    if (voiceStatus) voiceStatus.textContent = s;
+  }
+
+  function appendVoiceLine(label, text) {
+    if (!voiceLog) return;
+    const p = document.createElement("p");
+    p.style.margin = "0 0 10px";
+    p.innerHTML = `<strong>${escapeHtml(label)}:</strong> ${escapeHtml(text)}`;
+    voiceLog.appendChild(p);
+    voiceLog.scrollTop = voiceLog.scrollHeight;
+  }
+
+  function speak(text) {
+    try {
+      if (!ttsToggle?.checked) return;
+      if (!("speechSynthesis" in window)) return;
+      const utter = new SpeechSynthesisUtterance(text);
+      window.speechSynthesis.speak(utter);
+    } catch {}
+  }
+
+  function openVoice() {
     if (!voiceModal) return;
     voiceModal.hidden = false;
-    selectCard('voice');
-    setTimeout(() => voiceStartBtn && voiceStartBtn.focus(), 50);
+    // default selection
+    setSelected("voice");
   }
-  function closeVoice(){
+
+  function closeVoice() {
     if (!voiceModal) return;
     voiceModal.hidden = true;
     stopRecognition();
   }
-  $$('[data-open-voice]').forEach(btn => btn.addEventListener('click', openVoice));
-  $$('[data-close-voice]').forEach(btn => btn.addEventListener('click', closeVoice));
-  // click backdrop closes modal
-  if (voiceModal){
-    voiceModal.addEventListener('click', (e) => {
-      const target = e.target;
-      if (target && (target.hasAttribute?.('data-close-voice'))) closeVoice();
-    });
-  }
 
-  function addVoiceLine(role, text){
-    if (!transcript) return;
-    const div = document.createElement('div');
-    div.className = 'tline ' + role;
-    div.textContent = text;
-    transcript.appendChild(div);
-    transcript.scrollTop = transcript.scrollHeight;
-  }
+  openVoiceButtons.forEach(btn => btn.addEventListener("click", openVoice));
+  closeVoiceButtons.forEach(btn => btn.addEventListener("click", closeVoice));
 
-  function respondToVoice(text){
-    const t = text.toLowerCase();
-    if (t.includes('sell') || t.includes('selling')){
-      return "I can help intake that Tesla for your dealership. What’s the VIN, mileage, and condition (excellent/good/fair)?";
-    }
-    if (t.includes('model y')){
-      return "Got it. Are you looking for Long Range or Performance? And what’s your max budget and preferred color?";
-    }
-    if (t.includes('model 3')){
-      return "Sure. Do you want Performance, Long Range, or Standard Range? Any year or mileage limit?";
-    }
-    if (t.includes('trade')){
-      return "I can estimate a trade-in range. What’s the year, mileage, and any accidents or major repairs?";
-    }
-    if (t.includes('appointment') || t.includes('test drive')){
-      return "Great — what day/time works best, and what’s the best phone number for a quick confirmation?";
-    }
-    return "Thanks. I can recommend in-stock Teslas, compare trims, estimate payments, or intake a seller vehicle. What should we do first?";
-  }
+  voiceModal?.addEventListener("click", (e) => {
+    if (e.target === voiceModal) closeVoice();
+  });
 
-  function speak(text){
-    const enabled = !!(speakToggle && speakToggle.checked);
-    if (!enabled) return;
-    if (!('speechSynthesis' in window)) return;
-    try{
-      const u = new SpeechSynthesisUtterance(text);
-      u.rate = 1.0;
-      u.pitch = 1.0;
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(u);
-    }catch(_){}
-  }
-
-  // SpeechRecognition (best-effort)
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  let recognition = null;
-  let recognizing = false;
-
-  function setVoiceStatus(text){
-    if (voiceStatus) voiceStatus.textContent = text;
-  }
-
-  function initRecognition(){
-    if (!SpeechRecognition){
-      if (voiceSupportNote) voiceSupportNote.textContent = "Voice capture isn’t supported in this browser. Use the typed prompt or the chat demo.";
-      return null;
-    }
-    if (voiceSupportNote) voiceSupportNote.textContent = "Your browser may send audio to its speech provider for transcription. This is a preview—your production voice agent can use your own stack.";
+  function initRecognition() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) return null;
     const r = new SpeechRecognition();
-    r.lang = 'en-US';
+    r.lang = "en-US";
     r.interimResults = false;
     r.maxAlternatives = 1;
-    r.onstart = () => {
-      recognizing = true;
-      setVoiceStatus('Listening…');
-      if (voiceStartBtn) voiceStartBtn.disabled = true;
-      if (voiceStopBtn) voiceStopBtn.disabled = false;
-    };
-    r.onend = () => {
-      recognizing = false;
-      setVoiceStatus('Idle');
-      if (voiceStartBtn) voiceStartBtn.disabled = false;
-      if (voiceStopBtn) voiceStopBtn.disabled = true;
-    };
-    r.onerror = (e) => {
-      recognizing = false;
-      setVoiceStatus('Idle');
-      if (voiceSupportNote) voiceSupportNote.textContent = "Voice error: " + (e.error || 'unknown') + ". You can still type a prompt.";
-      if (voiceStartBtn) voiceStartBtn.disabled = false;
-      if (voiceStopBtn) voiceStopBtn.disabled = true;
-    };
-    r.onresult = (e) => {
-      const text = e.results?.[0]?.[0]?.transcript || '';
-      if (!text) return;
-      addVoiceLine('user', text);
-      const reply = respondToVoice(text);
-      window.setTimeout(() => {
-        addVoiceLine('ai', reply);
-        speak(reply);
-      }, 220);
-    };
     return r;
   }
 
-  function startRecognition(){
-    if (!voiceModal || voiceModal.hidden) openVoice();
-    if (!recognition) recognition = initRecognition();
-    if (!recognition) return;
+  function startRecognition() {
     if (recognizing) return;
-    try{
-      recognition.start();
-    }catch(_){}
-  }
+    if (!recognition) recognition = initRecognition();
 
-  function stopRecognition(){
-    if (!recognition) return;
-    if (!recognizing) return;
-    try{
-      recognition.stop();
-    }catch(_){}
-  }
-
-  if (voiceStartBtn) voiceStartBtn.addEventListener('click', startRecognition);
-  if (voiceStopBtn) voiceStopBtn.addEventListener('click', stopRecognition);
-
-  function sendManual(){
-    const text = (manualText?.value || '').trim();
-    if (!text) return;
-    addVoiceLine('user', text);
-    manualText.value = '';
-    const reply = respondToVoice(text);
-    window.setTimeout(() => {
-      addVoiceLine('ai', reply);
-      speak(reply);
-    }, 220);
-  }
-  if (manualSend) manualSend.addEventListener('click', sendManual);
-  if (manualText) manualText.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter'){
-      e.preventDefault();
-      sendManual();
+    if (!recognition) {
+      setVoiceStatus("Voice not supported on this device/browser");
+      return;
     }
+
+    try {
+      recognition.onresult = (event) => {
+        const text = event.results?.[0]?.[0]?.transcript || "";
+        if (text) handleVoicePrompt(text);
+      };
+      recognition.onerror = () => {
+        setVoiceStatus("Error");
+        stopRecognition();
+      };
+      recognition.onend = () => {
+        // auto-stop state
+        recognizing = false;
+        setVoiceStatus("Idle");
+        if (startVoiceBtn) startVoiceBtn.disabled = false;
+        if (stopVoiceBtn) stopVoiceBtn.disabled = true;
+      };
+
+      recognition.start();
+      recognizing = true;
+      setVoiceStatus("Listening…");
+      if (startVoiceBtn) startVoiceBtn.disabled = true;
+      if (stopVoiceBtn) stopVoiceBtn.disabled = false;
+    } catch {
+      setVoiceStatus("Unable to start voice");
+    }
+  }
+
+  function stopRecognition() {
+    try { recognition?.stop(); } catch {}
+    recognizing = false;
+    setVoiceStatus("Idle");
+    if (startVoiceBtn) startVoiceBtn.disabled = false;
+    if (stopVoiceBtn) stopVoiceBtn.disabled = true;
+  }
+
+  startVoiceBtn?.addEventListener("click", startRecognition);
+  stopVoiceBtn?.addEventListener("click", stopRecognition);
+
+  function handleVoicePrompt(prompt) {
+    appendVoiceLine("You", prompt);
+    const reply = mockVoiceResponse(prompt);
+    setTimeout(() => {
+      appendVoiceLine("OUT", reply);
+      speak(reply);
+    }, 450);
+  }
+
+  function mockVoiceResponse(prompt) {
+    const t = (prompt || "").toLowerCase();
+    if (t.includes("model y")) {
+      return "Great. What year range, mileage cap, and budget are you targeting? I can recommend in-stock options and book a callback.";
+    }
+    if (t.includes("model 3")) {
+      return "Sure. Do you want Performance, Long Range, or Standard Range? I can pull matching inventory and send listings.";
+    }
+    if (t.includes("sell") && t.includes("tesla")) {
+      return "I can help intake a seller. What’s the VIN and mileage, and where is the vehicle located?";
+    }
+    return "Got it. Tell me the model, year range, and budget — and I’ll recommend the best matches and schedule next steps.";
+  }
+
+  voiceTextForm?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const val = (voiceTextInput?.value || "").trim();
+    if (!val) return;
+    handleVoicePrompt(val);
+    voiceTextInput.value = "";
   });
 
-  // Close on Escape
-  document.addEventListener('keydown', (e) => {
-    if (e.key !== 'Escape') return;
-    if (voiceModal && !voiceModal.hidden) closeVoice();
-    if (chatDrawer && !chatDrawer.hidden) closeChat();
+  // -----------------------------
+  // Contact form stepper
+  // -----------------------------
+  const contactForm = $("#contactForm");
+  const steps = $$(".step", contactForm || document);
+  const nextBtn = $("#nextBtn");
+  const backBtn = $("#backBtn");
+  const progressBars = $$(".progress .bar");
+  const success = $("#formSuccess");
+  const otherBrandsField = $("#otherBrandsField");
+
+  let currentStep = 1;
+
+  function showStep(n) {
+    currentStep = n;
+    steps.forEach(s => s.classList.toggle("active", Number(s.dataset.step) === n));
+    // back button visibility
+    if (backBtn) backBtn.style.visibility = (n === 1) ? "hidden" : "visible";
+
+    // update progress
+    progressBars.forEach((bar, idx) => {
+      bar.classList.toggle("on", idx < n);
+    });
+
+    // next button label
+    if (nextBtn) nextBtn.textContent = (n === 3) ? "Submit" : "Next";
+  }
+
+  function validateStep(n) {
+    // minimal validation: check required inputs in current step
+    const stepEl = steps.find(s => Number(s.dataset.step) === n);
+    if (!stepEl) return true;
+
+    const required = Array.from(stepEl.querySelectorAll("[required]"));
+    let ok = true;
+
+    required.forEach(el => {
+      // Radio groups: only validate once per group
+      if (el.type === "radio") return;
+
+      if (!el.value || !el.value.trim()) {
+        ok = false;
+        el.focus();
+      }
+    });
+
+    // radio group validation
+    const radiosByName = {};
+    stepEl.querySelectorAll("input[type='radio'][required]").forEach(r => {
+      radiosByName[r.name] = radiosByName[r.name] || [];
+      radiosByName[r.name].push(r);
+    });
+    Object.keys(radiosByName).forEach(name => {
+      const group = radiosByName[name];
+      const checked = group.some(r => r.checked);
+      if (!checked) {
+        ok = false;
+        // focus first radio label
+        group[0]?.focus();
+      }
+    });
+
+    return ok;
+  }
+
+  function handleOtherEvsToggle() {
+    const otherEvsYes = contactForm?.querySelector("input[name='other_evs'][value='yes']");
+    const otherEvsNo = contactForm?.querySelector("input[name='other_evs'][value='no']");
+    const show = otherEvsYes?.checked;
+    if (!otherBrandsField) return;
+    otherBrandsField.style.opacity = show ? "1" : "0.45";
+    otherBrandsField.querySelectorAll("input").forEach(i => i.disabled = !show);
+
+    if (!show) {
+      otherBrandsField.querySelectorAll("input").forEach(i => i.checked = false);
+    }
+  }
+
+  contactForm?.addEventListener("change", (e) => {
+    const t = e.target;
+    if (t && t.name === "other_evs") handleOtherEvsToggle();
   });
 
+  nextBtn?.addEventListener("click", () => {
+    if (!contactForm) return;
+    if (currentStep < 3) {
+      if (!validateStep(currentStep)) return;
+      showStep(currentStep + 1);
+      if (currentStep === 3) handleOtherEvsToggle();
+      return;
+    }
+
+    // Submit
+    if (!validateStep(currentStep)) return;
+
+    const data = new FormData(contactForm);
+    const payload = Object.fromEntries(data.entries());
+    // Show in console for dev wiring
+    console.log("Contact Sales payload (front-end only):", payload);
+
+    contactForm.hidden = true;
+    if (success) success.hidden = false;
+  });
+
+  backBtn?.addEventListener("click", () => {
+    if (currentStep > 1) showStep(currentStep - 1);
+  });
+
+  // Initialize
+  showStep(1);
+  if (backBtn) backBtn.style.visibility = "hidden";
+  if (otherBrandsField) {
+    otherBrandsField.style.opacity = "0.45";
+    otherBrandsField.querySelectorAll("input").forEach(i => i.disabled = true);
+  }
+
+  // Utility
+  function escapeHtml(s) {
+    return String(s)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
 })();
