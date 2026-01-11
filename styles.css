@@ -9,11 +9,15 @@
   --muted: #556070;
   --line: rgba(16, 24, 40, 0.12);
 
-  --primary: #0b0f17;          /* black button */
+  --primary: #3b82f6;          /* blue CTA */
   --primaryText: #ffffff;
 
-  --accent: #2563eb;           /* subtle blue glow */
-  --accentSoft: rgba(37, 99, 235, 0.18);
+  --secondaryBg: #eef2f7;
+  --secondaryText: #0b1220;
+  --secondaryLine: rgba(16, 24, 40, 0.12);
+
+  --accent: #3b82f6;           /* CTA blue */
+  --accentSoft: rgba(59, 130, 246, 0.22);
   --accentRing: rgba(37, 99, 235, 0.35);
 
   --shadow: 0 12px 30px rgba(16, 24, 40, 0.08);
@@ -94,7 +98,7 @@ a:hover{ text-decoration: underline; }
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-weight: 700;
+  font-weight: 800;
 }
 .brand-mark{
   display: inline-flex;
@@ -108,7 +112,7 @@ a:hover{ text-decoration: underline; }
   font-size: 12px;
   letter-spacing: 0.8px;
 }
-.brand-name{ font-weight: 700; }
+.brand-name{ font-weight: 800; }
 
 .nav-links{
   display: none;
@@ -133,8 +137,8 @@ a:hover{ text-decoration: underline; }
   border: 1px solid var(--line);
   background: var(--card);
   color: var(--text);
-  font-weight: 700;
-  padding: 10px 14px;
+  font-weight: 800;
+  padding: 12px 18px;
   cursor: pointer;
   text-decoration: none;
   white-space: nowrap;
@@ -144,19 +148,27 @@ a:hover{ text-decoration: underline; }
 .btn:focus-visible{
   outline: none;
   box-shadow: 0 0 0 4px var(--accentSoft);
-  border-color: rgba(37, 99, 235, 0.55);
+  border-color: rgba(59, 130, 246, 0.60);
 }
 
+.btn-secondary{
+  background: var(--secondaryBg);
+  color: var(--secondaryText);
+  border-color: var(--secondaryLine);
+  box-shadow: 0 10px 22px rgba(16, 24, 40, 0.10);
+}
+.btn-secondary:hover{ filter: brightness(0.98); }
 .btn-primary{
   background: var(--primary);
   color: var(--primaryText);
   border-color: transparent;
+  box-shadow: 0 14px 26px rgba(59, 130, 246, 0.28);
 }
-.btn-primary:hover{ filter: brightness(1.05); }
+.btn-primary:hover{ filter: brightness(0.98); }
 .btn-ghost{
   background: transparent;
 }
-.btn-lg{ padding: 12px 18px; font-size: 15px; }
+.btn-lg{ padding: 14px 22px; font-size: 15px; }
 
 .btn-pill{
   background: #6b7280; /* gray pill like ElevenLabs Next */
@@ -169,7 +181,7 @@ a:hover{ text-decoration: underline; }
 
 .eyebrow{
   color: var(--muted);
-  font-weight: 700;
+  font-weight: 800;
   margin: 0 0 10px;
   letter-spacing: 0.2px;
 }
@@ -261,7 +273,7 @@ a:hover{ text-decoration: underline; }
   background: transparent;
   color: var(--muted);
   font-weight: 900;
-  padding: 10px 14px;
+  padding: 12px 18px;
   border-radius: 999px;
   cursor: default;
   white-space: nowrap;
@@ -292,7 +304,7 @@ a:hover{ text-decoration: underline; }
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 14px;
+  padding: 12px 18px;
   border-radius: 999px;
   background: rgba(255,255,255,0.85);
   border: 1px solid rgba(16, 24, 40, 0.14);
@@ -327,7 +339,7 @@ a:hover{ text-decoration: underline; }
   box-shadow: var(--shadow2);
 }
 .demo-card.selected{
-  border-color: rgba(37, 99, 235, 0.55);
+  border-color: rgba(59, 130, 246, 0.60);
   box-shadow: 0 0 0 5px var(--accentSoft), var(--shadow2);
 }
 
@@ -525,7 +537,7 @@ a:hover{ text-decoration: underline; }
   gap: 8px;
 }
 .field span, .field legend{
-  font-weight: 700;
+  font-weight: 800;
   color: rgba(11, 18, 32, 0.95);
 }
 .field input, .field textarea{
@@ -538,7 +550,7 @@ a:hover{ text-decoration: underline; }
 }
 .field input:focus, .field textarea:focus{
   outline: none;
-  border-color: rgba(37, 99, 235, 0.55);
+  border-color: rgba(59, 130, 246, 0.60);
   box-shadow: 0 0 0 4px var(--accentSoft);
 }
 .hint{ margin: 0; color: var(--muted); font-size: 13px; }
@@ -611,7 +623,7 @@ a:hover{ text-decoration: underline; }
   gap: 14px;
 }
 .footer-brand{ font-weight: 900; }
-.footer-links{ display: flex; gap: 14px; flex-wrap: wrap; color: var(--muted); font-weight: 700; }
+.footer-links{ display: flex; gap: 14px; flex-wrap: wrap; color: var(--muted); font-weight: 800; }
 .footer-bottom{ margin-top: 14px; font-size: 13px; }
 
 /* Launcher + Drawer */
@@ -678,7 +690,7 @@ a:hover{ text-decoration: underline; }
 .icon-btn:focus-visible{
   outline: none;
   box-shadow: 0 0 0 4px var(--accentSoft);
-  border-color: rgba(37, 99, 235, 0.55);
+  border-color: rgba(59, 130, 246, 0.60);
 }
 
 .drawer-body{
@@ -713,7 +725,7 @@ a:hover{ text-decoration: underline; }
 }
 .drawer-input input:focus{
   outline: none;
-  border-color: rgba(37, 99, 235, 0.55);
+  border-color: rgba(59, 130, 246, 0.60);
   box-shadow: 0 0 0 4px var(--accentSoft);
 }
 
