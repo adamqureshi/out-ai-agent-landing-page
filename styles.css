@@ -234,6 +234,81 @@ a:hover{ text-decoration: underline; }
   gap: 16px;
 }
 
+
+/* Single-card layout (so the demo card can be full-width on desktop) */
+.cards.cards-single{
+  grid-template-columns: 1fr;
+  max-width: 920px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Tabs inside the demo card */
+.demo-tabs{
+  margin-top: 14px;
+  display: inline-flex;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 999px;
+  border: 1px solid rgba(16, 24, 40, 0.10);
+  background: rgba(16, 24, 40, 0.04);
+  max-width: 100%;
+  overflow: auto;
+}
+.tab{
+  appearance: none;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 900;
+  padding: 10px 14px;
+  border-radius: 999px;
+  cursor: default;
+  white-space: nowrap;
+}
+.tab:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 4px var(--accentSoft);
+}
+.tab.active{
+  background: #fff;
+  color: var(--text);
+  border-color: rgba(37, 99, 235, 0.35);
+  box-shadow: 0 0 0 4px var(--accentSoft);
+}
+
+.tab-panels{ margin-top: 12px; }
+.tab-panel{ margin-top: 0; }
+
+.demo-tabs-card{ cursor: default; }
+
+.voice-blurb{
+  margin: 0 0 12px;
+  color: var(--muted);
+}
+
+/* Small ElevenLabs-like voice pill in the preview */
+.voice-chip{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.85);
+  border: 1px solid rgba(16, 24, 40, 0.14);
+  width: fit-content;
+  margin-bottom: 10px;
+  font-weight: 900;
+  color: rgba(11, 18, 32, 0.92);
+}
+.voice-orb{
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: conic-gradient(from 180deg, #5eead4, #60a5fa, #1d4ed8, #93c5fd, #5eead4);
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.14);
+}
+
 .card{
   background: var(--card);
   border: 1px solid var(--line);
@@ -243,7 +318,7 @@ a:hover{ text-decoration: underline; }
 }
 
 .demo-card{
-  cursor: pointer;
+  cursor: default;
   position: relative;
   transition: box-shadow 150ms ease, transform 150ms ease, border-color 150ms ease;
 }
@@ -481,7 +556,7 @@ a:hover{ text-decoration: underline; }
   border-radius: 999px;
   border: 1px solid rgba(16, 24, 40, 0.16);
   background: rgba(16, 24, 40, 0.02);
-  cursor: pointer;
+  cursor: default;
   user-select: none;
 }
 .toggle input{ accent-color: var(--primary); }
@@ -557,7 +632,7 @@ a:hover{ text-decoration: underline; }
   justify-content: space-between;
   gap: 12px;
   font-weight: 800;
-  cursor: pointer;
+  cursor: default;
 }
 .launcher .dot{
   width: 10px;
@@ -598,7 +673,7 @@ a:hover{ text-decoration: underline; }
   background: #fff;
   border-radius: 12px;
   padding: 6px 10px;
-  cursor: pointer;
+  cursor: default;
 }
 .icon-btn:focus-visible{
   outline: none;
@@ -723,6 +798,7 @@ a:hover{ text-decoration: underline; }
 @media (min-width: 860px){
   .nav-links{ display: flex; }
   .cards{ grid-template-columns: 1fr 1fr; }
+  .cards.cards-single{ grid-template-columns: 1fr; }
   .contact-grid{ grid-template-columns: 1.1fr 1fr; }
   .field-row{ grid-template-columns: 1fr 1fr; }
   .footer-inner{ flex-direction: row; justify-content: space-between; align-items: flex-start; }

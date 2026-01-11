@@ -1,50 +1,70 @@
 (() => {
   const $ = (sel, root=document) => root.querySelector(sel);
   const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
-
   // -----------------------------
-  // Demo card selection
+  // Demo mode tabs (Chat vs Voice)
   // -----------------------------
-  const cards = $$(".demo-card");
-  const selectedLabel = $("#selectedLabel");
   const preferredDemo = $("#preferredDemo");
+  const tabChat = $("#tabChat");
+  const tabVoice = $("#tabVoice");
+  const panelChat = $("#panelChat");
+  const panelVoice = $("#panelVoice");
+  const tabs = $$(".demo-tabs [role='tab']");
 
-  function setSelected(kind) {
-    cards.forEach(card => {
-      const isSelected = card.dataset.demo === kind;
-      card.classList.toggle("selected", isSelected);
-      card.setAttribute("aria-pressed", isSelected ? "true" : "false");
-    });
+  function setDemoMode(mode, opts={}) {
+    const kind = (mode === "voice") ? "voice" : "chat";
+    const isVoice = kind === "voice";
 
-    const label = kind === "voice" ? "Voice AI Agent" : "Chat AI Agent";
-    if (selectedLabel) selectedLabel.textContent = label;
+    if (tabChat) {
+      tabChat.classList.toggle("active", !isVoice);
+      tabChat.setAttribute("aria-selected", String(!isVoice));
+      tabChat.tabIndex = !isVoice ? 0 : -1;
+    }
+    if (tabVoice) {
+      tabVoice.classList.toggle("active", isVoice);
+      tabVoice.setAttribute("aria-selected", String(isVoice));
+      tabVoice.tabIndex = isVoice ? 0 : -1;
+    }
+
+    if (panelChat) panelChat.hidden = isVoice;
+    if (panelVoice) panelVoice.hidden = !isVoice;
 
     if (preferredDemo) preferredDemo.value = kind;
 
     try { localStorage.setItem("out_demo_preference", kind); } catch {}
+
+    if (opts.focus) {
+      (isVoice ? tabVoice : tabChat)?.focus();
+    }
   }
 
   // Restore selection
   try {
     const saved = localStorage.getItem("out_demo_preference");
-    if (saved === "voice" || saved === "chat") setSelected(saved);
-    else setSelected("chat");
+    setDemoMode(saved === "voice" ? "voice" : "chat");
   } catch {
-    setSelected("chat");
+    setDemoMode("chat");
   }
 
-  cards.forEach(card => {
-    card.addEventListener("click", (e) => {
-      // ignore clicks on buttons/links inside the card
-      const target = e.target;
-      if (target && (target.closest("button") || target.closest("a"))) return;
-      setSelected(card.dataset.demo);
-    });
+  tabs.forEach((btn) => {
+    btn.addEventListener("click", () => setDemoMode(btn.dataset.mode || "chat"));
 
-    card.addEventListener("keydown", (e) => {
+    // basic keyboard support for tabs
+    btn.addEventListener("keydown", (e) => {
+      const order = [tabChat, tabVoice].filter(Boolean);
+      const idx = order.indexOf(document.activeElement);
+
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+        e.preventDefault();
+        const next = (e.key === "ArrowRight")
+          ? order[(idx + 1) % order.length]
+          : order[(idx - 1 + order.length) % order.length];
+        next?.focus();
+      }
+
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        setSelected(card.dataset.demo);
+        setDemoMode(btn.dataset.mode || "chat");
       }
     });
   });
@@ -52,6 +72,7 @@
   // -----------------------------
   // Chat drawer (front-end preview)
   // -----------------------------
+
   const launcher = $("#launcher");
   const chatDrawer = $("#chatDrawer");
   const chatMessages = $("#chatMessages");
@@ -62,6 +83,7 @@
 
   function openChat() {
     if (!chatDrawer) return;
+    setDemoMode("chat");
     chatDrawer.hidden = false;
     setTimeout(() => chatInput?.focus(), 50);
   }
@@ -167,7 +189,7 @@
     if (!voiceModal) return;
     voiceModal.hidden = false;
     // default selection
-    setSelected("voice");
+    setDemoMode("voice");
   }
 
   function closeVoice() {

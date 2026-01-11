@@ -58,83 +58,88 @@
     <section class="demo" id="demo">
       <div class="container">
         <div class="section-head">
-          <h2>Choose your demo</h2>
-          <p>Offer both. Some rooftops want chat, others want voice. Click a card to select it — then try the demo.</p>
-          <p class="selected">Selected: <strong id="selectedLabel">Chat AI Agent</strong></p>
+          <h2>Demo</h2>
+          <p>
+            One agent, two ways to engage shoppers: <strong>Chat</strong> for your website and <strong>Voice</strong> for calls, kiosks, or mobile.
+            Pick a mode below to preview.
+          </p>
         </div>
 
-        <div class="cards">
-          <!-- Chat card -->
-          <article class="card demo-card selected" data-demo="chat" tabindex="0" role="button" aria-pressed="true">
+        <div class="cards cards-single">
+          <article class="card demo-card demo-tabs-card" aria-label="OUT AI Agent demo">
             <header class="card-head">
               <div class="icon" aria-hidden="true">
-                <!-- chat icon -->
+                <!-- sparkle icon -->
                 <svg viewBox="0 0 24 24" fill="none">
-                  <path d="M7 8h10M7 12h7M12 20c-4.97 0-9-3.58-9-8s4.03-8 9-8 9 3.58 9 8c0 2.02-.95 3.86-2.53 5.28L19 20l-3.35-1.45C14.51 18.84 13.28 20 12 20Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 2l1.2 4.6L18 8l-4.8 1.4L12 14l-1.2-4.6L6 8l4.8-1.4L12 2Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                  <path d="M19 13l.7 2.6L22 16l-2.3.4L19 19l-.7-2.6L16 16l2.3-.4L19 13Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
                 </svg>
               </div>
               <div>
-                <h3>Chat AI Agent</h3>
-                <p class="muted">Website chat for inventory + lead capture</p>
+                <h3>OUT AI Agent</h3>
+                <p class="muted">Chat + Voice AI for Tesla inventory dealerships</p>
               </div>
             </header>
 
-            <div class="mini-chat" aria-hidden="true">
-              <div class="bubble bubble-ai">Ask me about any Tesla on your lot.</div>
-              <div class="bubble bubble-user">Do you have a Model 3 Performance?</div>
-              <div class="bubble bubble-ai">Yes — I can show exact listings and book a test drive.</div>
-              <div class="mini-input">Type a question… <span class="kbd">↵</span></div>
+            <div class="demo-tabs" role="tablist" aria-label="Demo mode">
+              <button class="tab active" type="button" role="tab" id="tabChat" aria-selected="true" aria-controls="panelChat" data-mode="chat">Chat</button>
+              <button class="tab" type="button" role="tab" id="tabVoice" aria-selected="false" aria-controls="panelVoice" data-mode="voice">Voice</button>
             </div>
 
-            <ul class="checklist">
-              <li>Answers availability, trims, options, and comparisons</li>
-              <li>Links shoppers to the exact listing</li>
-              <li>Captures name/email/phone + intent summary</li>
-            </ul>
+            <div class="tab-panels">
+              <!-- Chat panel -->
+              <section class="tab-panel" id="panelChat" role="tabpanel" aria-labelledby="tabChat">
+                <div class="mini-chat" aria-hidden="true">
+                  <div class="bubble bubble-ai">Ask me about any Tesla on your lot.</div>
+                  <div class="bubble bubble-user">Do you have a Model 3 Performance?</div>
+                  <div class="bubble bubble-ai">Yes — I can show exact listings and book a test drive.</div>
+                  <div class="mini-input">Type a question… <span class="kbd">↵</span></div>
+                </div>
 
-            <div class="card-actions">
-              <button class="btn btn-primary" type="button" data-open-chat>Try chat demo</button>
-              <a class="btn btn-ghost" href="#contact">Contact sales</a>
-            </div>
-          </article>
+                <ul class="checklist">
+                  <li>Answers availability, trims, options, and comparisons</li>
+                  <li>Links shoppers to the exact listing</li>
+                  <li>Captures name/email/phone + intent summary</li>
+                </ul>
 
-          <!-- Voice card -->
-          <article class="card demo-card" data-demo="voice" tabindex="0" role="button" aria-pressed="false">
-            <header class="card-head">
-              <div class="icon" aria-hidden="true">
-                <!-- mic icon -->
-                <svg viewBox="0 0 24 24" fill="none">
-                  <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M19 11a7 7 0 0 1-14 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-                  <path d="M12 18v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-                  <path d="M8 21h8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-                </svg>
-              </div>
-              <div>
-                <h3>Voice AI Agent</h3>
-                <p class="muted">Hands-free voice for calls, kiosks, or mobile</p>
-              </div>
-            </header>
+                <div class="card-actions">
+                  <button class="btn btn-primary" type="button" data-open-chat>Try chat demo</button>
+                  <a class="btn btn-ghost" href="#contact">Contact sales</a>
+                </div>
+              </section>
 
-            <div class="mini-voice" aria-hidden="true">
-              <div class="bubble bubble-ai">Hi — tell me what Tesla you’re looking for.</div>
-              <div class="bubble bubble-user">I want a Model Y under 35k.</div>
-              <div class="bubble bubble-ai">Got it. I can recommend options in stock and book a test drive.</div>
-              <div class="voice-row">
-                <span class="voice-pill">Press to talk</span>
-                <span class="voice-pill">Instant summary</span>
-              </div>
-            </div>
+              <!-- Voice panel -->
+              <section class="tab-panel" id="panelVoice" role="tabpanel" aria-labelledby="tabVoice" hidden>
+                <p class="voice-blurb">
+                  <strong>Enhanced with voice agents</strong> that guide customers through purchases, answer product questions,
+                  and provide personalized shopping experiences.
+                </p>
 
-            <ul class="checklist">
-              <li>Natural voice conversations (low friction)</li>
-              <li>Qualifies buyer intent and books callbacks</li>
-              <li>Seller intake: VIN/mileage/condition/location</li>
-            </ul>
+                <div class="mini-voice" aria-hidden="true">
+                  <div class="voice-chip">
+                    <span class="voice-orb" aria-hidden="true"></span>
+                    Talk to an agent
+                  </div>
+                  <div class="bubble bubble-ai">Hi — tell me what Tesla you’re looking for.</div>
+                  <div class="bubble bubble-user">I want a Model Y under 35k.</div>
+                  <div class="bubble bubble-ai">Got it. I can recommend options in stock and book a test drive.</div>
+                  <div class="voice-row">
+                    <span class="voice-pill">Press to talk</span>
+                    <span class="voice-pill">Instant summary</span>
+                  </div>
+                </div>
 
-            <div class="card-actions">
-              <button class="btn btn-primary" type="button" data-open-voice>Talk to OUT (voice)</button>
-              <a class="btn btn-ghost" href="#contact">Contact sales</a>
+                <ul class="checklist">
+                  <li>Hands-free voice conversations (low friction)</li>
+                  <li>Answers product questions + recommends in-stock options</li>
+                  <li>Qualifies buyer intent + books callbacks</li>
+                </ul>
+
+                <div class="card-actions">
+                  <button class="btn btn-primary" type="button" data-open-voice>Talk to OUT (voice)</button>
+                  <a class="btn btn-ghost" href="#contact">Contact sales</a>
+                </div>
+              </section>
             </div>
           </article>
         </div>
