@@ -26,6 +26,15 @@
 }
 
 *{ box-sizing: border-box; }
+
+/*
+  Ensure the HTML `hidden` attribute always hides elements.
+  (Our modal/drawer components set `display: flex/grid`, which can override
+  the browser default for `[hidden]` unless we explicitly enforce it.)
+*/
+[hidden]{
+  display: none !important;
+}
 html, body{ height: 100%; }
 body{
   margin: 0;
