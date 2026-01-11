@@ -1,24 +1,12 @@
 # OUT AI Agent landing page (static)
 
-This repo is a **static landing page** template for OnlyUsedTesla.ai / OUT AI Agent.
+This is a simple static landing page you can host on GitHub Pages, Azure Static Web Apps, etc.
 
-## What's included
-- Hero section
-- Demo selection (Chat AI Agent + Voice AI Agent)
-- Contact Sales section (split layout like ElevenLabs) with a simple multi-step form (front-end only)
-- Chat demo drawer (front-end only)
-- Voice demo modal (browser speech features where supported)
+## Files
+- `index.html` – page markup
+- `styles.css` – styling
+- `script.js` – light interactivity (tabs, demo drawers, simple form handling)
 
-## Deploy
-Host anywhere static:
-- GitHub Pages
-- Azure Static Web Apps
-- Azure Storage static website
-- etc.
-
-## Backend wiring (later)
-Your developer can wire:
-- the **contact form** to an Azure Function / API endpoint
-- the **chat demo** and **voice demo** to your real AI service
-
-For now, the form logs payload to the browser console and shows a success state.
+## Notes
+- The Chat + Voice demos are UI previews only (no backend).
+- The contact form logs payload to the browser console; wire it to your backend later.
