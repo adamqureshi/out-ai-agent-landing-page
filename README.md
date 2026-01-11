@@ -7,6 +7,8 @@ It’s intentionally simple so you can:
 - host it anywhere (Azure Static Web Apps, Azure Storage static website, GitHub Pages, etc.)
 - wire the form + chat widget to your backend later
 
+This version is **minimal** — only the nav + hero + chat preview are included. Sections (Product / Pricing / Demo form / FAQ) were removed so you can add them back one-by-one.
+
 ## Files
 - `index.html` — page structure + marketing copy + demo placeholders
 - `styles.css` — all styling (mobile-first)
