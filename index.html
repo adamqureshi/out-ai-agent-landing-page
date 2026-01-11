@@ -1,175 +1,299 @@
-<!DOCTYPE html>
-
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<meta content="OUT AI Agent installs on your dealership website to sell Teslas from your live inventory feed and capture more leads—24/7." name="description"/>
-<title>OUT AI Agent — The AI sales assistant for Tesla dealerships</title>
-<!-- Open Graph -->
-<meta content="OUT AI Agent — The AI sales assistant for Tesla dealerships" property="og:title"/>
-<meta content="Answer questions, recommend the right Tesla, capture leads, and even source Teslas from private sellers." property="og:description"/>
-<meta content="website" property="og:type"/>
-<link href="favicon.ico" rel="icon"/>
-<link href="styles.css" rel="stylesheet"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OUT AI Agent — Chat + Voice AI for Tesla dealerships</title>
+  <meta name="description" content="OUT AI Agent installs on your dealership website. Connect your inventory feed and let Chat + Voice AI qualify leads, answer Tesla inventory questions, and intake private-seller vehicles." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<a class="skip-link" href="#main">Skip to content</a>
-<!-- Top glow background (pure CSS) -->
-<div aria-hidden="true" class="bg-glow"></div>
-<header class="site-header">
-<nav aria-label="Primary" class="nav">
-<a class="brand" href="#">
-<span aria-hidden="true" class="brand-mark">◈</span>
-<span class="brand-name">OnlyUsedTesla<span class="brand-dot">.ai</span></span>
-</a>
-<button aria-controls="navMenu" aria-expanded="false" class="nav-toggle" type="button">
-<span class="sr-only">Open menu</span>
-<span aria-hidden="true" class="nav-toggle-bars"></span>
-</button>
-<div class="nav-menu" id="navMenu">
+  <a class="skip-link" href="#main">Skip to content</a>
 
+  <!-- Header / Nav -->
+  <header class="site-header">
+    <div class="container nav-row">
+      <a class="brand" href="#" aria-label="OUT AI Agent home">
+        <span class="brand-mark" aria-hidden="true">OUT</span>
+        <span class="brand-name">AI Agent</span>
+      </a>
 
+      <nav class="nav" aria-label="Primary navigation">
+        <a class="nav-link" href="#demo">Demo</a>
+        <a class="nav-link" href="#footer">Contact</a>
+      </nav>
 
+      <div class="nav-actions">
+        <a class="btn btn-ghost" href="#" aria-label="Log in">Log in</a>
+        <a class="btn btn-primary" href="#" aria-label="Sign up">Sign up</a>
+        <button class="nav-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
 
-<a class="nav-link" href="#top">Home</a><div class="nav-cta">
-<a class="btn btn-ghost" href="#demoEmbed">View demo</a>
-<a class="btn btn-ghost" href="/signin">Sign in</a>
-<a class="btn btn-primary" href="/signup">Sign up</a>
-</div>
-</div>
-</nav>
-<section class="hero" id="top">
-<div class="hero-copy">
-<p class="eyebrow">OUT AI Agent for dealerships with Tesla inventory</p>
-<h1 class="hero-title">
-          The #1 AI Agent for shopping for a Tesla / selling a Tesla.
-        </h1>
-<p class="hero-subtitle">
-          Install OUT on your dealership website. Connect your <strong>live inventory feed</strong> so shoppers can ask questions,
-          get matched to the right vehicles, and book next steps — 24/7.
-          Enable a private-seller intake flow to help your dealership <strong>buy Teslas from sellers</strong>, too.
-        </p>
-<div aria-label="Agent modes" class="hero-chips">
-<span class="chip"><span aria-hidden="true" class="chip-dot"></span> Shopping AI agent</span>
-<span class="chip"><span aria-hidden="true" class="chip-dot"></span> Buying AI agent</span>
-</div>
-<div class="hero-actions">
-<a class="btn btn-primary" href="#demoEmbed">View demo</a>
-<button class="btn btn-ghost" data-open-chat="" type="button">Try the chat</button>
-</div>
-<p class="hero-fineprint">
-          Not affiliated with Tesla, Inc. “Tesla” is used to describe inventory.
-        </p>
-</div>
-<div aria-label="Product demo preview" class="hero-demo">
-<div class="demo-card">
-<div class="demo-card-top">
-<div class="demo-badge">
-<span aria-hidden="true" class="demo-dot"></span>
-              Live preview
+    <!-- Mobile menu -->
+    <div class="mobile-menu" id="mobileMenu" hidden>
+      <div class="container mobile-menu-inner">
+        <a class="mobile-link" href="#demo">Demo</a>
+        <a class="mobile-link" href="#footer">Contact</a>
+        <div class="mobile-actions">
+          <a class="btn btn-ghost" href="#">Log in</a>
+          <a class="btn btn-primary" href="#">Sign up</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Built for Tesla inventory dealers</p>
+          <h1 class="hero-title">The #1 AI Agent for shopping for a Tesla — and selling a Tesla.</h1>
+          <p class="hero-subtitle">
+            Install OUT on your dealership website. Connect your live inventory feed (CSV / XML / API) and let
+            <strong>Chat + Voice AI</strong> answer questions instantly, capture leads, and turn
+            “I’m thinking of selling my Tesla” into acquisition opportunities.
+          </p>
+
+          <ul class="hero-bullets">
+            <li>Inventory Q&A, comparisons, and listing links</li>
+            <li>Lead capture + clean handoff summaries</li>
+            <li>Private-seller intake: VIN, mileage, condition, photos (optional)</li>
+          </ul>
+
+          <div class="hero-ctas">
+            <a class="btn btn-primary" href="#demo">View demo</a>
+            <button class="btn btn-ghost" type="button" data-open-chat>Try chat now</button>
+          </div>
+
+          <p class="micro">
+            Cancel anytime. Not affiliated with Tesla, Inc. “Tesla” is used to describe vehicle inventory only.
+          </p>
+        </div>
+
+        <div class="hero-panel" aria-label="Preview panel">
+          <div class="panel-card">
+            <div class="panel-header">
+              <span class="pill">Live preview</span>
+              <span class="pill pill-muted">Mobile-friendly</span>
             </div>
-<div class="demo-actions">
-<button aria-label="Open chat demo" class="icon-btn" data-open-chat="" title="Open chat demo" type="button">
-<span aria-hidden="true">↗</span>
-</button>
-</div>
-</div>
-<div aria-label="Embed area" class="demo-embed" id="demoEmbed">
-<!--
-              Embed your video/animation here.
-              Example:
-              <iframe src="https://..." title="OUT AI Agent demo" loading="lazy"></iframe>
-            -->
-<div class="demo-placeholder">
-<p><strong>Demo spot</strong></p>
-<p>Embed your UI animation/video here.</p>
-<p class="muted">Recommended: 9:16 or 4:5 aspect ratio for mobile.</p>
-</div>
-</div>
-<div aria-hidden="true" class="chat-preview">
-<div class="chat-preview-header">
-<span class="chat-preview-title">OUT • AI Agent</span>
-<span class="chat-preview-pill">Dealership site</span>
-</div>
-<div class="chat-preview-body" id="chatPreviewBody">
-<!-- Filled by script.js -->
-</div>
-<div class="chat-preview-footer">
-<div class="chat-input-fake">
-                Ask about inventory, financing, trade-ins…
+            <div class="panel-body">
+              <div class="mini-preview">
+                <div class="mini-top">
+                  <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                  <span class="mini-title">OUT AI Agent</span>
+                </div>
+                <div class="mini-chat">
+                  <div class="bubble bubble-ai">Looking for a Model Y? What year & budget are you targeting?</div>
+                  <div class="bubble bubble-user">2022 Model Y Long Range under $35k.</div>
+                  <div class="bubble bubble-ai">Got it. I can show in-stock options and estimate payments. Want 5-seat or 7-seat?</div>
+                </div>
+                <div class="mini-input">
+                  <span class="mini-placeholder">Ask about inventory…</span>
+                  <span class="mini-send" aria-hidden="true">↵</span>
+                </div>
               </div>
-<div aria-hidden="true" class="chat-send-fake">➤</div>
-</div>
-</div>
-</div>
-<p class="demo-caption">
-          This is a lightweight front-end preview. Your developer can connect the widget to Azure APIs.
+            </div>
+          </div>
+
+          <div class="hero-note">
+            Tip: dealers that respond in minutes win. OUT answers instantly and routes hot leads to your team.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Demo picker section -->
+    <section class="section" id="demo">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title">Choose your demo</h2>
+          <p class="section-subtitle">
+            Offer both. Some rooftops want chat, others want voice. Click a card to select it — then try the demo.
+          </p>
+          <div class="selection-status" aria-live="polite">
+            Selected: <span id="selectedDemoLabel">Chat AI Agent</span>
+          </div>
+        </div>
+
+        <div class="product-grid" role="list">
+          <!-- Chat card -->
+          <article class="product-card product-card--selected" role="listitem" tabindex="0" data-demo="chat" aria-label="Chat AI Agent demo card">
+            <div class="product-top">
+              <div class="product-icon" aria-hidden="true">💬</div>
+              <div class="product-titles">
+                <h3>Chat AI Agent</h3>
+                <p class="product-kicker">Website chat for inventory + lead capture</p>
+              </div>
+            </div>
+
+            <div class="product-preview chat-preview">
+              <div class="chat-line ai">Ask me about any Tesla on your lot.</div>
+              <div class="chat-line user">Do you have a Model 3 Performance?</div>
+              <div class="chat-line ai">Yes — I can show exact listings and book a test drive.</div>
+              <div class="chat-input">
+                <span class="chat-placeholder">Type a question…</span>
+                <span class="chat-send" aria-hidden="true">↵</span>
+              </div>
+            </div>
+
+            <ul class="product-list">
+              <li>Answers availability, trims, options, and comparisons</li>
+              <li>Links shoppers to the exact listing</li>
+              <li>Captures name/email/phone + intent summary</li>
+            </ul>
+
+            <div class="product-actions">
+              <button class="btn btn-primary" type="button" data-open-chat>Try chat demo</button>
+              <a class="btn btn-ghost" href="#footer">Talk to sales</a>
+            </div>
+          </article>
+
+          <!-- Voice card -->
+          <article class="product-card" role="listitem" tabindex="0" data-demo="voice" aria-label="Voice AI Agent demo card">
+            <div class="product-top">
+              <div class="product-icon" aria-hidden="true">🎙️</div>
+              <div class="product-titles">
+                <h3>Voice AI Agent</h3>
+                <p class="product-kicker">Hands-free voice for calls, kiosks, or mobile</p>
+              </div>
+            </div>
+
+            <div class="product-preview voice-preview" aria-label="Voice preview UI">
+              <div class="voice-orb" aria-hidden="true"></div>
+              <div class="voice-transcript">
+                <div class="voice-bubble ai">Hi — tell me what Tesla you’re looking for.</div>
+                <div class="voice-bubble user">I want a Model Y under 35k.</div>
+                <div class="voice-bubble ai">Got it. I can recommend options in stock and book a test drive.</div>
+              </div>
+              <div class="voice-controls" aria-hidden="true">
+                <span class="voice-pill">Press to talk</span>
+                <span class="voice-pill">Instant summary</span>
+              </div>
+            </div>
+
+            <ul class="product-list">
+              <li>Natural voice conversations (low friction)</li>
+              <li>Qualifies buyer intent and books callbacks</li>
+              <li>Seller intake: VIN/mileage/condition/location</li>
+            </ul>
+
+            <div class="product-actions">
+              <button class="btn btn-primary" type="button" data-open-voice>Talk to OUT (voice)</button>
+              <a class="btn btn-ghost" href="#footer">Talk to sales</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" id="footer">
+    <div class="container footer-row">
+      <div>
+        <div class="footer-brand">OUT AI Agent</div>
+        <div class="footer-sub">Chat + Voice AI for Tesla dealerships.</div>
+        <div class="footer-legal">Not affiliated with Tesla, Inc.</div>
+      </div>
+
+      <div class="footer-links">
+        <a href="#demo">Demo</a>
+        <a href="#" aria-label="Email sales">Email sales</a>
+        <a href="#" aria-label="Privacy policy">Privacy</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating launcher -->
+  <button class="launcher" type="button" data-open-chat aria-label="Ask OUT anything">
+    <span class="launcher-dot" aria-hidden="true"></span>
+    Ask OUT
+  </button>
+
+  <!-- Chat drawer (front-end preview) -->
+  <div class="drawer" id="chatDrawer" role="dialog" aria-modal="true" aria-label="Chat demo" hidden>
+    <div class="drawer-card">
+      <div class="drawer-top">
+        <div class="drawer-title">
+          <span class="drawer-badge">Demo</span>
+          <strong>OUT Chat AI Agent</strong>
+        </div>
+        <button class="icon-btn" type="button" data-close-chat aria-label="Close chat">✕</button>
+      </div>
+
+      <div class="drawer-body" id="chatBody" aria-label="Chat messages">
+        <div class="msg ai">Hi — I’m OUT. Ask me about Tesla inventory, payments, or selling your Tesla.</div>
+        <div class="msg ai small">This is a front-end preview (your dev can connect it to Azure later).</div>
+      </div>
+
+      <form class="drawer-input" id="chatForm">
+        <input class="text" id="chatText" type="text" inputmode="text" autocomplete="off" placeholder="Type a message…" />
+        <button class="send" type="submit" aria-label="Send">Send</button>
+      </form>
+    </div>
+    <div class="drawer-backdrop" data-close-chat aria-hidden="true"></div>
+  </div>
+
+    <!-- Voice modal (front-end preview) -->
+  <div class="modal" id="voiceModal" hidden>
+    <div class="modal-sheet" role="dialog" aria-modal="true" aria-label="Voice demo" tabindex="-1">
+      <div class="modal-top">
+        <div class="drawer-title">
+          <span class="drawer-badge">Demo</span>
+          <strong>OUT Voice AI Agent</strong>
+        </div>
+        <button class="icon-btn" type="button" data-close-voice aria-label="Close voice demo">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <p class="micro micro-tight">
+          Optional browser demo using built-in speech features. No backend required.
+          If voice isn’t supported on your device, you can still run the chat demo.
         </p>
-</div>
-</section>
-</header>
-<main id="main">
 
+        <div class="voice-stage">
+          <div class="voice-live">
+            <div class="voice-avatar" aria-hidden="true"></div>
+            <div class="voice-status">
+              <div class="voice-status-title">Status: <span id="voiceStatus">Idle</span></div>
+              <div class="voice-status-sub" id="voiceSupportNote"></div>
+            </div>
+          </div>
 
+          <div class="transcript" id="voiceTranscript" aria-label="Voice transcript">
+            <div class="tline ai">Hi — say something like “Do you have a 2022 Model Y under 35k?”</div>
+          </div>
 
+          <div class="voice-actions">
+            <button class="btn btn-primary" type="button" id="voiceStartBtn">Start voice</button>
+            <button class="btn btn-ghost" type="button" id="voiceStopBtn" disabled>Stop</button>
+            <label class="toggle">
+              <input type="checkbox" id="voiceSpeakToggle" checked />
+              <span>Speak responses</span>
+            </label>
+          </div>
 
+          <div class="voice-manual">
+            <div class="micro micro-tight">No mic? Type a prompt:</div>
+            <div class="voice-manual-row">
+              <input class="text" id="voiceManualText" type="text" placeholder="e.g., I want to sell my Tesla. VIN is..." />
+              <button class="send" type="button" id="voiceManualSend">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <div class="modal-backdrop" data-close-voice aria-hidden="true"></div>
+  </div>
 
-</main>
-<footer class="footer">
-<div class="container footer-inner">
-<div>
-<a class="brand footer-brand" href="#top">
-<span aria-hidden="true" class="brand-mark">◈</span>
-<span class="brand-name">OnlyUsedTesla<span class="brand-dot">.ai</span></span>
-</a>
-<p class="muted">
-          OUT AI Agent helps dealerships sell and acquire Teslas with a fast, mobile-first AI chat experience.
-        </p>
-</div>
-<div class="footer-links">
-<a href="#demoEmbed">View demo</a>
-
-
-<a href="/signup">Sign up</a>
-<a href="/signin">Sign in</a>
-</div>
-</div>
-<div class="container footer-bottom">
-<p class="muted small">
-        © <span id="year"></span> OnlyUsedTesla.ai. Not affiliated with Tesla, Inc.
-      </p>
-</div>
-</footer>
-<!-- Sticky chat launcher -->
-<button aria-label="Open chat" class="chat-launcher" data-open-chat="" type="button">
-<span aria-hidden="true" class="chat-launcher-dot"></span>
-    Ask OUT anything
-    <span aria-hidden="true" class="chat-launcher-arrow">↗</span>
-</button>
-<!-- Chat drawer (front-end demo only) -->
-<div aria-hidden="true" class="chat-drawer" id="chatDrawer">
-<div class="chat-drawer-backdrop" data-close-chat=""></div>
-<div aria-label="Chat demo" aria-modal="true" class="chat-window" role="dialog">
-<div class="chat-window-header">
-<div class="chat-window-title">
-<span aria-hidden="true" class="chat-avatar">◈</span>
-<div>
-<div class="chat-title">OUT AI Agent</div>
-<div class="chat-subtitle muted">Demo chat (no backend)</div>
-</div>
-</div>
-<button aria-label="Close chat" class="icon-btn" data-close-chat="" type="button">✕</button>
-</div>
-<div aria-live="polite" class="chat-window-body" id="chatBody"></div>
-<form class="chat-window-footer" id="chatForm">
-<label class="sr-only" for="chatInput">Message</label>
-<input autocomplete="off" id="chatInput" name="message" placeholder="Ask: “Do you have a Model Y under $35k?”" type="text"/>
-<button class="btn btn-primary" type="submit">Send</button>
-</form>
-</div>
-</div>
-<script defer="" src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

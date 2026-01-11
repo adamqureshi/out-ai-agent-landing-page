@@ -1,256 +1,260 @@
-/* ==========================================================
-   OnlyUsedTesla.ai — OUT AI Agent Landing (static JS)
-   - Mobile nav toggle
-   - Chat preview animation
-   - Demo chat drawer (front-end only)
-   - Lead form fake submit (wire to backend later)
-   ========================================================== */
-
-(function () {
-  const $ = (sel, root = document) => root.querySelector(sel);
-  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
-
-  // Year
-  const yearEl = $("#year");
-  if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+/* OUT AI Agent — static landing interactions (no backend) */
+(function(){
+  const $ = (sel, root=document) => root.querySelector(sel);
+  const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
 
   // Mobile nav
-  const navToggle = $(".nav-toggle");
-  const navMenu = $("#navMenu");
-  if (navToggle && navMenu) {
-    navToggle.addEventListener("click", () => {
-      const isOpen = navMenu.classList.toggle("is-open");
-      navToggle.setAttribute("aria-expanded", String(isOpen));
+  const burger = $('.nav-burger');
+  const mobileMenu = $('#mobileMenu');
+  if (burger && mobileMenu){
+    burger.addEventListener('click', () => {
+      const expanded = burger.getAttribute('aria-expanded') === 'true';
+      burger.setAttribute('aria-expanded', String(!expanded));
+      mobileMenu.hidden = expanded;
     });
-
-    // Close menu when clicking a link (mobile)
-    $$(".nav-link", navMenu).forEach((a) => {
-      a.addEventListener("click", () => {
-        navMenu.classList.remove("is-open");
-        navToggle.setAttribute("aria-expanded", "false");
-      });
-    });
+    $$('#mobileMenu a').forEach(a => a.addEventListener('click', () => {
+      burger.setAttribute('aria-expanded', 'false');
+      mobileMenu.hidden = true;
+    }));
   }
 
-  // --------------------------
-  // Chat preview (hero card)
-  // --------------------------
-  const previewBody = $("#chatPreviewBody");
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  const previewScript = [
-    { from: "out", text: "Hi! Want to shop for a Tesla — or sell one?" },
-    { from: "in", text: "Do you have a Model Y under $35k?" },
-    { from: "out", text: "Yes — I can pull options from your live inventory. Any preference on year, mileage, or color?" },
-    { from: "in", text: "2021+ and under 50k miles." },
-    { from: "out", text: "Perfect. Want to book a test drive for today or tomorrow?" },
-  ];
-
-  function bubbleEl(from, text) {
-    const div = document.createElement("div");
-    div.className = `bubble ${from}`;
-    div.textContent = text;
-    return div;
+  // Demo selection highlight
+  const selectedLabel = $('#selectedDemoLabel');
+  const cards = $$('.product-card[data-demo]');
+  function selectCard(type){
+    cards.forEach(c => c.classList.toggle('product-card--selected', c.dataset.demo === type));
+    if (selectedLabel) selectedLabel.textContent = type === 'voice' ? 'Voice AI Agent' : 'Chat AI Agent';
   }
-
-  function typingEl() {
-    const wrap = document.createElement("div");
-    wrap.className = "typing";
-    wrap.setAttribute("aria-hidden", "true");
-    wrap.innerHTML = "<span></span><span></span><span></span>";
-    return wrap;
-  }
-
-  async function runPreview() {
-    if (!previewBody) return;
-
-    // Clear
-    previewBody.innerHTML = "";
-
-    // If reduced motion, just render everything.
-    if (prefersReducedMotion) {
-      previewScript.forEach((m) => previewBody.appendChild(bubbleEl(m.from, m.text)));
-      return;
-    }
-
-    // Animated loop
-    let i = 0;
-    while (true) {
-      previewBody.innerHTML = "";
-      i = 0;
-
-      while (i < previewScript.length) {
-        const msg = previewScript[i];
-
-        // Simulate typing before OUT messages
-        if (msg.from === "out") {
-          const t = typingEl();
-          previewBody.appendChild(t);
-          await wait(600);
-          t.remove();
-        } else {
-          await wait(180);
-        }
-
-        previewBody.appendChild(bubbleEl(msg.from, msg.text));
-        previewBody.scrollTop = previewBody.scrollHeight;
-        await wait(900);
-        i++;
+  cards.forEach(card => {
+    card.addEventListener('click', () => selectCard(card.dataset.demo));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        selectCard(card.dataset.demo);
       }
-
-      await wait(1200);
-    }
-  }
-
-  function wait(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
-  runPreview();
-
-  // --------------------------
-  // Chat drawer (front-end demo)
-  // --------------------------
-  const drawer = $("#chatDrawer");
-  const chatBody = $("#chatBody");
-  const chatForm = $("#chatForm");
-  const chatInput = $("#chatInput");
-
-  const openButtons = $$("[data-open-chat]");
-  const closeButtons = $$("[data-close-chat]");
-
-  function openChat() {
-    if (!drawer) return;
-    drawer.classList.add("is-open");
-    drawer.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-
-    // Seed a demo conversation once.
-    if (chatBody && chatBody.childElementCount === 0) {
-      pushMessage("out", "Welcome! I’m OUT AI Agent (demo). Ask me anything a dealership owner might ask.");
-      pushMessage("out", "Try: “How does it connect to inventory?” or “Can it buy from private sellers?”");
-    }
-
-    setTimeout(() => chatInput && chatInput.focus(), 50);
-  }
-
-  function closeChat() {
-    if (!drawer) return;
-    drawer.classList.remove("is-open");
-    drawer.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-  }
-
-  openButtons.forEach((btn) => btn.addEventListener("click", openChat));
-  closeButtons.forEach((btn) => btn.addEventListener("click", closeChat));
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeChat();
+    });
   });
 
-  function pushMessage(from, text) {
+  // Chat drawer
+  const chatDrawer = $('#chatDrawer');
+  const chatBody = $('#chatBody');
+  const chatForm = $('#chatForm');
+  const chatText = $('#chatText');
+
+  function openChat(){
+    if (!chatDrawer) return;
+    chatDrawer.hidden = false;
+    // focus input
+    setTimeout(() => chatText && chatText.focus(), 50);
+    // reflect selection
+    selectCard('chat');
+  }
+  function closeChat(){
+    if (!chatDrawer) return;
+    chatDrawer.hidden = true;
+  }
+  $$('[data-open-chat]').forEach(btn => btn.addEventListener('click', openChat));
+  $$('[data-close-chat]').forEach(btn => btn.addEventListener('click', closeChat));
+
+  // Simple chat responder (placeholder)
+  function respondToChat(text){
+    const t = text.toLowerCase();
+    if (t.includes('model y')) return "Yes — I can show Model Y options in stock. What year range and budget are you aiming for?";
+    if (t.includes('model 3')) return "Got it. Are you looking for Standard Range, Long Range, or Performance?";
+    if (t.includes('trade')) return "Sure — I can estimate trade-in ranges. What’s the year/mileage and condition?";
+    if (t.includes('sell') || t.includes('selling')) return "I can help intake a private-seller Tesla. What’s the VIN (or year/model), mileage, and your location?";
+    if (t.includes('payment') || t.includes('monthly')) return "I can estimate monthly payments. What price target, down payment, and credit tier should I assume?";
+    return "Got it. I can help with inventory questions, comparisons, test drive requests, or seller intake. What’s the Tesla you’re interested in?";
+  }
+  function addChatMsg(role, text){
     if (!chatBody) return;
-    const el = bubbleEl(from, text);
-    chatBody.appendChild(el);
+    const div = document.createElement('div');
+    div.className = 'msg ' + role;
+    div.textContent = text;
+    chatBody.appendChild(div);
     chatBody.scrollTop = chatBody.scrollHeight;
   }
-
-  function respondTo(userText) {
-    const t = (userText || "").toLowerCase();
-
-    // Very light “demo brain” (no real AI here)
-    if (t.includes("inventory") || t.includes("feed") || t.includes("csv") || t.includes("xml") || t.includes("api")) {
-      return [
-        "We connect to your inventory feed (CSV, XML, or an API endpoint).",
-        "OUT indexes listings so it can recommend *real vehicles* and answer availability/spec questions.",
-        "Your dev can keep the feed + sync on Azure; the widget calls your endpoint."
-      ].join(" ");
-    }
-
-    if (t.includes("private") || t.includes("seller") || t.includes("sell my") || t.includes("trade")) {
-      return [
-        "Yes — OUT can run a “Sell my Tesla” intake flow.",
-        "It collects VIN, mileage, condition, photos (optional), and contact details, then sends your team a clean summary to make an offer."
-      ].join(" ");
-    }
-
-    if (t.includes("price") || t.includes("pricing") || t.includes("cost") || t.includes("monthly")) {
-      return [
-        "Typical starting point is $499/mo + a one‑time setup to connect your site + inventory feed.",
-        "Many dealers upgrade once they add rooftops, SMS, or custom CRM routing."
-      ].join(" ");
-    }
-
-    if (t.includes("install") || t.includes("setup") || t.includes("how long") || t.includes("deploy")) {
-      return [
-        "Install is usually a small script tag on your site, plus connecting your inventory feed.",
-        "Most dealers can go live quickly once we have the feed and lead routing destination."
-      ].join(" ");
-    }
-
-    if (t.includes("tesla") && (t.includes("model y") || t.includes("model 3") || t.includes("model s") || t.includes("model x"))) {
-      return [
-        "In production, I’d look at your live inventory and suggest matching units.",
-        "For the demo: tell me your target price, year, and max mileage and I’ll show how I’d qualify the lead."
-      ].join(" ");
-    }
-
-    return [
-      "Got it.",
-      "In production, OUT would answer using your dealership’s inventory feed + policies.",
-      "If you tell me what you want the agent to do (sell inventory, buy from private sellers, book appointments), I can suggest the best setup."
-    ].join(" ");
+  if (chatForm){
+    chatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const text = (chatText?.value || '').trim();
+      if (!text) return;
+      addChatMsg('user', text);
+      chatText.value = '';
+      window.setTimeout(() => addChatMsg('ai', respondToChat(text)), 260);
+    });
   }
 
-  function showTypingThenReply(replyText) {
-    if (!chatBody) return;
+  // Voice modal
+  const voiceModal = $('#voiceModal');
+  const voiceStatus = $('#voiceStatus');
+  const voiceSupportNote = $('#voiceSupportNote');
+  const transcript = $('#voiceTranscript');
+  const voiceStartBtn = $('#voiceStartBtn');
+  const voiceStopBtn = $('#voiceStopBtn');
+  const speakToggle = $('#voiceSpeakToggle');
+  const manualText = $('#voiceManualText');
+  const manualSend = $('#voiceManualSend');
 
-    const t = typingEl();
-    chatBody.appendChild(t);
-    chatBody.scrollTop = chatBody.scrollHeight;
+  function openVoice(){
+    if (!voiceModal) return;
+    voiceModal.hidden = false;
+    selectCard('voice');
+    setTimeout(() => voiceStartBtn && voiceStartBtn.focus(), 50);
+  }
+  function closeVoice(){
+    if (!voiceModal) return;
+    voiceModal.hidden = true;
+    stopRecognition();
+  }
+  $$('[data-open-voice]').forEach(btn => btn.addEventListener('click', openVoice));
+  $$('[data-close-voice]').forEach(btn => btn.addEventListener('click', closeVoice));
+  // click backdrop closes modal
+  if (voiceModal){
+    voiceModal.addEventListener('click', (e) => {
+      const target = e.target;
+      if (target && (target.hasAttribute?.('data-close-voice'))) closeVoice();
+    });
+  }
 
-    const delay = prefersReducedMotion ? 0 : 700;
+  function addVoiceLine(role, text){
+    if (!transcript) return;
+    const div = document.createElement('div');
+    div.className = 'tline ' + role;
+    div.textContent = text;
+    transcript.appendChild(div);
+    transcript.scrollTop = transcript.scrollHeight;
+  }
+
+  function respondToVoice(text){
+    const t = text.toLowerCase();
+    if (t.includes('sell') || t.includes('selling')){
+      return "I can help intake that Tesla for your dealership. What’s the VIN, mileage, and condition (excellent/good/fair)?";
+    }
+    if (t.includes('model y')){
+      return "Got it. Are you looking for Long Range or Performance? And what’s your max budget and preferred color?";
+    }
+    if (t.includes('model 3')){
+      return "Sure. Do you want Performance, Long Range, or Standard Range? Any year or mileage limit?";
+    }
+    if (t.includes('trade')){
+      return "I can estimate a trade-in range. What’s the year, mileage, and any accidents or major repairs?";
+    }
+    if (t.includes('appointment') || t.includes('test drive')){
+      return "Great — what day/time works best, and what’s the best phone number for a quick confirmation?";
+    }
+    return "Thanks. I can recommend in-stock Teslas, compare trims, estimate payments, or intake a seller vehicle. What should we do first?";
+  }
+
+  function speak(text){
+    const enabled = !!(speakToggle && speakToggle.checked);
+    if (!enabled) return;
+    if (!('speechSynthesis' in window)) return;
+    try{
+      const u = new SpeechSynthesisUtterance(text);
+      u.rate = 1.0;
+      u.pitch = 1.0;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(u);
+    }catch(_){}
+  }
+
+  // SpeechRecognition (best-effort)
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recognition = null;
+  let recognizing = false;
+
+  function setVoiceStatus(text){
+    if (voiceStatus) voiceStatus.textContent = text;
+  }
+
+  function initRecognition(){
+    if (!SpeechRecognition){
+      if (voiceSupportNote) voiceSupportNote.textContent = "Voice capture isn’t supported in this browser. Use the typed prompt or the chat demo.";
+      return null;
+    }
+    if (voiceSupportNote) voiceSupportNote.textContent = "Your browser may send audio to its speech provider for transcription. This is a preview—your production voice agent can use your own stack.";
+    const r = new SpeechRecognition();
+    r.lang = 'en-US';
+    r.interimResults = false;
+    r.maxAlternatives = 1;
+    r.onstart = () => {
+      recognizing = true;
+      setVoiceStatus('Listening…');
+      if (voiceStartBtn) voiceStartBtn.disabled = true;
+      if (voiceStopBtn) voiceStopBtn.disabled = false;
+    };
+    r.onend = () => {
+      recognizing = false;
+      setVoiceStatus('Idle');
+      if (voiceStartBtn) voiceStartBtn.disabled = false;
+      if (voiceStopBtn) voiceStopBtn.disabled = true;
+    };
+    r.onerror = (e) => {
+      recognizing = false;
+      setVoiceStatus('Idle');
+      if (voiceSupportNote) voiceSupportNote.textContent = "Voice error: " + (e.error || 'unknown') + ". You can still type a prompt.";
+      if (voiceStartBtn) voiceStartBtn.disabled = false;
+      if (voiceStopBtn) voiceStopBtn.disabled = true;
+    };
+    r.onresult = (e) => {
+      const text = e.results?.[0]?.[0]?.transcript || '';
+      if (!text) return;
+      addVoiceLine('user', text);
+      const reply = respondToVoice(text);
+      window.setTimeout(() => {
+        addVoiceLine('ai', reply);
+        speak(reply);
+      }, 220);
+    };
+    return r;
+  }
+
+  function startRecognition(){
+    if (!voiceModal || voiceModal.hidden) openVoice();
+    if (!recognition) recognition = initRecognition();
+    if (!recognition) return;
+    if (recognizing) return;
+    try{
+      recognition.start();
+    }catch(_){}
+  }
+
+  function stopRecognition(){
+    if (!recognition) return;
+    if (!recognizing) return;
+    try{
+      recognition.stop();
+    }catch(_){}
+  }
+
+  if (voiceStartBtn) voiceStartBtn.addEventListener('click', startRecognition);
+  if (voiceStopBtn) voiceStopBtn.addEventListener('click', stopRecognition);
+
+  function sendManual(){
+    const text = (manualText?.value || '').trim();
+    if (!text) return;
+    addVoiceLine('user', text);
+    manualText.value = '';
+    const reply = respondToVoice(text);
     window.setTimeout(() => {
-      t.remove();
-      pushMessage("out", replyText);
-    }, delay);
+      addVoiceLine('ai', reply);
+      speak(reply);
+    }, 220);
   }
-
-  if (chatForm) {
-    chatForm.addEventListener("submit", (e) => {
+  if (manualSend) manualSend.addEventListener('click', sendManual);
+  if (manualText) manualText.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter'){
       e.preventDefault();
-      if (!chatInput) return;
+      sendManual();
+    }
+  });
 
-      const value = chatInput.value.trim();
-      if (!value) return;
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (voiceModal && !voiceModal.hidden) closeVoice();
+    if (chatDrawer && !chatDrawer.hidden) closeChat();
+  });
 
-      pushMessage("in", value);
-      chatInput.value = "";
-
-      const reply = respondTo(value);
-      showTypingThenReply(reply);
-    });
-  }
-
-  // --------------------------
-  // Lead form (fake submit)
-  // --------------------------
-  const leadForm = $("#leadForm");
-  const formNote = $("#formNote");
-
-  if (leadForm) {
-    leadForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-
-      // In production, POST to your Azure endpoint here.
-      // Example:
-      // fetch("/api/leads", { method: "POST", body: new FormData(leadForm) })
-
-      if (formNote) {
-        formNote.textContent = "Thanks — demo request captured (front‑end only). Wire this to your backend.";
-      }
-
-      leadForm.reset();
-    });
-  }
 })();
