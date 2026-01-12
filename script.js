@@ -1,393 +1,573 @@
 (() => {
-  const $ = (sel, root = document) => root.querySelector(sel);
-  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+  const $ = (sel, root=document) => root.querySelector(sel);
+  const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+  // -----------------------------
+  // Demo mode tabs (Chat vs Voice)
+  // -----------------------------
+  const preferredDemo = $("#preferredDemo");
+  const tabChat = $("#tabChat");
+  const tabVoice = $("#tabVoice");
+  const panelChat = $("#panelChat");
+  const panelVoice = $("#panelVoice");
+  const tabs = $$(".demo-tabs [role='tab']");
 
-  // Footer year
-  const yearEl = $("#year");
-  if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+  function setDemoMode(mode, opts={}) {
+    const kind = (mode === "voice") ? "voice" : "chat";
+    const isVoice = kind === "voice";
 
-  // Smooth scroll helper
-  const scrollToId = (id) => {
-    const el = typeof id === "string" ? document.querySelector(id) : id;
-    if (!el) return;
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
+    if (tabChat) {
+      tabChat.classList.toggle("active", !isVoice);
+      tabChat.setAttribute("aria-selected", String(!isVoice));
+      tabChat.tabIndex = !isVoice ? 0 : -1;
+    }
+    if (tabVoice) {
+      tabVoice.classList.toggle("active", isVoice);
+      tabVoice.setAttribute("aria-selected", String(isVoice));
+      tabVoice.tabIndex = isVoice ? 0 : -1;
+    }
 
-  // Contact CTA
-  const heroContactBtn = $("#heroContactBtn");
-  heroContactBtn?.addEventListener("click", () => scrollToId("#contact"));
-  $$("[data-scroll]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const target = btn.getAttribute("data-scroll");
-      if (target) scrollToId(target);
+    if (panelChat) panelChat.hidden = isVoice;
+    if (panelVoice) panelVoice.hidden = !isVoice;
+
+    if (preferredDemo) preferredDemo.value = kind;
+
+    try { localStorage.setItem("out_demo_preference", kind); } catch {}
+
+    if (opts.focus) {
+      (isVoice ? tabVoice : tabChat)?.focus();
+    }
+  }
+
+  // Restore selection
+  try {
+    const saved = localStorage.getItem("out_demo_preference");
+    setDemoMode(saved === "voice" ? "voice" : "chat");
+  } catch {
+    setDemoMode("chat");
+  }
+
+  tabs.forEach((btn) => {
+    btn.addEventListener("click", () => setDemoMode(btn.dataset.mode || "chat"));
+
+    // basic keyboard support for tabs
+    btn.addEventListener("keydown", (e) => {
+      const order = [tabChat, tabVoice].filter(Boolean);
+      const idx = order.indexOf(document.activeElement);
+
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+        e.preventDefault();
+        const next = (e.key === "ArrowRight")
+          ? order[(idx + 1) % order.length]
+          : order[(idx - 1 + order.length) % order.length];
+        next?.focus();
+      }
+
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        setDemoMode(btn.dataset.mode || "chat");
+      }
     });
   });
 
-  // Demo tabs
-  const demoTabs = $("#demoTabs");
-  const preferredDemo = $("#preferredDemo");
-  const panelChat = $("#panelChat");
-  const panelVoice = $("#panelVoice");
 
-  const setActiveTab = (tab) => {
-    const tabChat = $("#tabChat");
-    const tabVoice = $("#tabVoice");
-    const isChat = tab === "chat";
+  // -----------------------------
+  // Voice preview UI (mocked transcripts + play)
+  // -----------------------------
+  const voiceUI = $("[data-voice-ui]");
+  const voiceScenarioBtns = $$("[data-voice-ui] [data-voice-scenario]");
+  const voiceTranscript = $("[data-voice-ui] [data-voice-transcript]");
+  const voicePlayBtn = $("[data-voice-ui] [data-voice-play]");
+  const voiceProgress = $("[data-voice-ui] [data-voice-progress]");
+  const voiceTime = $("[data-voice-ui] [data-voice-time]");
 
-    demoTabs?.setAttribute("data-active", tab);
-
-    // Buttons
-    tabChat?.classList.toggle("is-active", isChat);
-    tabChat?.setAttribute("aria-selected", String(isChat));
-    tabVoice?.classList.toggle("is-active", !isChat);
-    tabVoice?.setAttribute("aria-selected", String(!isChat));
-
-    // Panels
-    if (panelChat) panelChat.hidden = !isChat;
-    if (panelVoice) panelVoice.hidden = isChat;
-
-    if (preferredDemo) preferredDemo.value = tab;
-  };
-
-  $("#tabChat")?.addEventListener("click", () => setActiveTab("chat"));
-  $("#tabVoice")?.addEventListener("click", () => setActiveTab("voice"));
-
-  // Voice preview selection + play/progress
-  const voiceRows = $$(".voice-row");
-  const voiceSelectedLabel = $("#voiceSelectedLabel");
-  const voiceStatus = $("#voiceStatus");
-  const voicePlayBtn = $("#voicePlayBtn");
-  const voiceProgress = $("#voiceProgress");
-  const voiceCopyBtn = $("#voiceCopyBtn");
-  const voiceResetBtn = $("#voiceResetBtn");
-
-  const VOICE_DEMOS = {
+  const VOICE_SCENARIOS = {
     cash: {
-      label: "Cash Offer AI Agent",
+      label: "Cash offer agent",
+      durationSec: 14,
       transcript: [
-        "OUT: Thanks — are you looking for a cash offer or trade-in estimate?",
-        "Customer: Cash offer.",
-        "OUT: Great. What’s the year, trim, mileage, and VIN? Any damage or prior repairs?"
+        { who: "YoYo", text: "Hi — looking for a cash offer? What vehicle are you selling?" },
+        { who: "Seller", text: "2022 Model Y Long Range." },
+        { who: "YoYo", text: "Great. What’s the mileage and VIN?" },
+        { who: "Seller", text: "38,200 miles. I can share the VIN once we get started." },
+        { who: "YoYo", text: "No problem. Any accidents or major repairs? And how would you rate the condition?" },
+        { who: "Seller", text: "No accidents. Good condition overall." },
+        { who: "YoYo", text: "Perfect. If you’d like, upload a few photos (optional) and I’ll route this to the dealership with a summary so they can make an offer." }
       ]
     },
     shopping: {
-      label: "Shopping AI Agent",
+      label: "Shopping agent",
+      durationSec: 16,
       transcript: [
-        "OUT: What are you shopping for — make/model, budget, and must-haves?",
-        "Customer: Luxury EV under $55k.",
-        "OUT: Got it. I’ll narrow options, explain features, and book a test drive when you’re ready."
+        { who: "YoYo", text: "Hi — what kind of car are you shopping for? EV or something else?" },
+        { who: "Customer", text: "Luxury EV under $45k." },
+        { who: "YoYo", text: "Got it. SUV or sedan — and any must-haves (AWD, range, color)?" },
+        { who: "Customer", text: "SUV, AWD, 300+ mile range." },
+        { who: "YoYo", text: "Great. I can narrow options, compare trims, and explain features on the exact car you pick." },
+        { who: "Customer", text: "Can you show me the best matches in stock?" },
+        { who: "YoYo", text: "Absolutely. I’ll recommend the top matches and capture your contact info so we can set up a test drive or take a deposit if you’re ready." }
       ]
     }
   };
 
-  let selectedVoice = "cash";
-  let playTimer = null;
-  let playStart = 0;
-  const PLAY_MS = 6500;
+  let currentVoiceScenario = "cash";
+  let voiceTimer = null;
+  let voicePlaying = false;
+  let voiceStart = 0;
+  let voiceDurationMs = VOICE_SCENARIOS.cash.durationSec * 1000;
 
-  const setVoiceSelection = (key) => {
-    if (!VOICE_DEMOS[key]) return;
-    selectedVoice = key;
+  function fmtTime(ms) {
+    const s = Math.max(0, Math.floor(ms / 1000));
+    const m = Math.floor(s / 60);
+    const r = s % 60;
+    return `${m}:${String(r).padStart(2, "0")}`;
+  }
 
-    voiceRows.forEach((row) => {
-      const isSel = row.getAttribute("data-voice") === key;
-      row.classList.toggle("is-selected", isSel);
-      row.setAttribute("aria-selected", String(isSel));
+  function renderVoiceTranscript(key) {
+    if (!voiceTranscript) return;
+    const data = VOICE_SCENARIOS[key] || VOICE_SCENARIOS.cash;
+    voiceTranscript.innerHTML = "";
+    data.transcript.forEach((line) => {
+      const row = document.createElement("div");
+      row.className = "vt-row";
+
+      const orb = document.createElement("div");
+      orb.className = "vt-orb" + (line.who === "YoYo" ? " out" : " user");
+
+      const body = document.createElement("div");
+      body.className = "vt-body";
+
+      const who = document.createElement("div");
+      who.className = "vt-who";
+      who.textContent = line.who;
+
+      const text = document.createElement("div");
+      text.className = "vt-text";
+      text.textContent = line.text;
+
+      body.appendChild(who);
+      body.appendChild(text);
+
+      row.appendChild(orb);
+      row.appendChild(body);
+      voiceTranscript.appendChild(row);
+    });
+  }
+
+  function setVoiceScenario(key) {
+    const k = (key in VOICE_SCENARIOS) ? key : "cash";
+    currentVoiceScenario = k;
+    voiceDurationMs = (VOICE_SCENARIOS[k].durationSec || 14) * 1000;
+
+    voiceScenarioBtns.forEach((btn) => {
+      const active = (btn.dataset.voiceScenario === k);
+      btn.classList.toggle("active", active);
+      btn.setAttribute("aria-selected", active ? "true" : "false");
     });
 
-    if (voiceSelectedLabel) voiceSelectedLabel.textContent = VOICE_DEMOS[key].label;
-  };
+    // reset playback when switching
+    stopVoicePreview(true);
+    renderVoiceTranscript(k);
 
-  voiceRows.forEach((row) => {
-    row.addEventListener("click", () => {
-      const key = row.getAttribute("data-voice") || "cash";
-      setVoiceSelection(key);
-      // Optional: start playing immediately when user picks an agent
-      // startPlay();
-    });
-  });
+    try { localStorage.setItem("out_voice_scenario", k); } catch {}
+  }
 
-  const stopPlay = () => {
-    if (playTimer) {
-      cancelAnimationFrame(playTimer);
-      playTimer = null;
-    }
+  function setProgress(pct, msElapsed) {
+    if (voiceProgress) voiceProgress.style.width = `${Math.max(0, Math.min(100, pct))}%`;
+    if (voiceTime) voiceTime.textContent = fmtTime(msElapsed);
+  }
+
+  function stopVoicePreview(silent=false) {
+    if (voiceTimer) window.clearInterval(voiceTimer);
+    voiceTimer = null;
+    voicePlaying = false;
     if (voicePlayBtn) voicePlayBtn.classList.remove("is-playing");
-    if (voiceProgress) voiceProgress.style.width = "0%";
-    if (voiceStatus) voiceStatus.textContent = "Idle";
-  };
-
-  const tickPlay = () => {
-    const elapsed = performance.now() - playStart;
-    const pct = Math.min(100, (elapsed / PLAY_MS) * 100);
-    if (voiceProgress) voiceProgress.style.width = pct.toFixed(2) + "%";
-    if (elapsed >= PLAY_MS) {
-      stopPlay();
-      return;
+    setProgress(0, 0);
+    if (!silent && voicePlayBtn) {
+      // quick tap feedback only; nothing else
     }
-    playTimer = requestAnimationFrame(tickPlay);
-  };
+  }
 
-  const startPlay = () => {
-    stopPlay(); // restart
-    playStart = performance.now();
-    if (voiceStatus) voiceStatus.textContent = "Playing";
+  function startVoicePreview() {
+    stopVoicePreview(true);
+    voicePlaying = true;
+    voiceStart = Date.now();
     if (voicePlayBtn) voicePlayBtn.classList.add("is-playing");
-    playTimer = requestAnimationFrame(tickPlay);
-  };
+
+    voiceTimer = window.setInterval(() => {
+      const elapsed = Date.now() - voiceStart;
+      const pct = (elapsed / voiceDurationMs) * 100;
+      if (elapsed >= voiceDurationMs) {
+        stopVoicePreview(true);
+        return;
+      }
+      setProgress(pct, elapsed);
+    }, 80);
+  }
+
+  // Wire events
+  voiceScenarioBtns.forEach((btn) => {
+    btn.addEventListener("click", () => setVoiceScenario(btn.dataset.voiceScenario));
+  });
 
   voicePlayBtn?.addEventListener("click", () => {
-    const isPlaying = voicePlayBtn.classList.contains("is-playing");
-    if (isPlaying) stopPlay();
-    else startPlay();
+    if (voicePlaying) stopVoicePreview(true);
+    else startVoicePreview();
   });
 
-  voiceResetBtn?.addEventListener("click", () => {
-    stopPlay();
-    setVoiceSelection("cash");
-  });
+  // Init
+  if (voiceUI) {
+    let saved = "cash";
+    try { saved = localStorage.getItem("out_voice_scenario") || "cash"; } catch {}
+    setVoiceScenario(saved);
+  }
 
-  voiceCopyBtn?.addEventListener("click", async () => {
-    const demo = VOICE_DEMOS[selectedVoice];
-    if (!demo) return;
-    const text = demo.transcript.join("\n");
-    try {
-      await navigator.clipboard.writeText(text);
-      if (voiceStatus) {
-        const prev = voiceStatus.textContent;
-        voiceStatus.textContent = "Copied";
-        setTimeout(() => (voiceStatus.textContent = prev || "Idle"), 900);
-      }
-    } catch {
-      // ignore if clipboard blocked
-      if (voiceStatus) voiceStatus.textContent = "Copy blocked";
-      setTimeout(() => (voiceStatus.textContent = "Idle"), 900);
-    }
-  });
+  // -----------------------------
+  // Chat drawer (front-end preview)
+  // -----------------------------
 
-  // Contact form behavior
-  const sellOtherBrands = $("#sellOtherBrands");
-  const agentForOtherBrands = $("#agentForOtherBrands");
-  sellOtherBrands?.addEventListener("change", () => {
-    if (!agentForOtherBrands) return;
-    const yes = sellOtherBrands.value === "yes";
-    agentForOtherBrands.disabled = !yes;
-  });
-
-  const contactForm = $("#contactForm");
-  const formStatus = $("#formStatus");
-  contactForm?.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    // Static demo: show a friendly message and log the payload in console.
-    const data = Object.fromEntries(new FormData(contactForm).entries());
-    console.log("Contact form payload (static demo):", data);
-
-    if (formStatus) {
-      formStatus.textContent = "Thanks — we received your info. (Static demo; wire to backend later.)";
-    }
-
-    // Optional: clear only notes field
-    const notes = contactForm.querySelector('textarea[name="notes"]');
-    if (notes) notes.value = "";
-  });
-
-  // Chat drawer
+  const launcher = $("#launcher");
   const chatDrawer = $("#chatDrawer");
-  const openChatDemo = $("#openChatDemo");
-  const askLauncher = $("#askLauncher");
-  const closeChat = $("#closeChat");
+  const chatMessages = $("#chatMessages");
   const chatForm = $("#chatForm");
   const chatInput = $("#chatInput");
-  const chatBody = $("#chatBody");
+  const openChatButtons = $$("[data-open-chat]");
+  const closeDrawerButtons = $$("[data-close-drawer]");
 
-  const openDrawer = () => {
+  function openChat() {
     if (!chatDrawer) return;
+    setDemoMode("chat");
     chatDrawer.hidden = false;
-    document.body.style.overflow = "hidden";
     setTimeout(() => chatInput?.focus(), 50);
-  };
-
-  const closeDrawer = () => {
+  }
+  function closeChat() {
     if (!chatDrawer) return;
     chatDrawer.hidden = true;
-    document.body.style.overflow = "";
-  };
+  }
 
-  openChatDemo?.addEventListener("click", openDrawer);
-  askLauncher?.addEventListener("click", openDrawer);
-  closeChat?.addEventListener("click", closeDrawer);
+  launcher?.addEventListener("click", openChat);
+  openChatButtons.forEach(btn => btn.addEventListener("click", openChat));
+  closeDrawerButtons.forEach(btn => btn.addEventListener("click", closeChat));
 
-  // Close drawer on backdrop click
   chatDrawer?.addEventListener("click", (e) => {
-    if (e.target === chatDrawer) closeDrawer();
+    // click outside? (not implemented — drawer is anchored)
   });
+
+  function addMsg(text, who="ai") {
+    if (!chatMessages) return;
+    const div = document.createElement("div");
+    div.className = `msg ${who}`;
+    div.textContent = text;
+    chatMessages.appendChild(div);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
 
   chatForm?.addEventListener("submit", (e) => {
     e.preventDefault();
-    const msg = (chatInput?.value || "").trim();
-    if (!msg) return;
+    const val = (chatInput?.value || "").trim();
+    if (!val) return;
+    addMsg(val, "user");
+    chatInput.value = "";
 
-    const user = document.createElement("div");
-    user.className = "bubble user";
-    user.textContent = msg;
-    chatBody?.appendChild(user);
-
-    if (chatInput) chatInput.value = "";
-    chatBody?.scrollTo({ top: chatBody.scrollHeight, behavior: "smooth" });
-
-    // Fake bot response
-    setTimeout(() => {
-      const bot = document.createElement("div");
-      bot.className = "bubble bot";
-      bot.textContent =
-        "Thanks — I can help with that. (Demo UI only.) Want me to route this to sales and book a test drive?";
-      chatBody?.appendChild(bot);
-      chatBody?.scrollTo({ top: chatBody.scrollHeight, behavior: "smooth" });
-    }, 450);
+    // lightweight mocked response
+    const response = mockChatResponse(val);
+    setTimeout(() => addMsg(response, "ai"), 350);
   });
 
-  // Voice modal (live mic)
-  const voiceModal = $("#voiceModal");
-  const voiceTitle = $("#voiceTitle");
-  const openLiveVoice = $("#openLiveVoice");
-  const closeVoice = $("#closeVoice");
-  const startVoice = $("#startVoice");
-  const stopVoiceBtn = $("#stopVoice");
-  const speakResponses = $("#speakResponses");
-  const voiceLiveStatus = $("#voiceLiveStatus");
-  const voiceLiveLog = $("#voiceLiveLog");
-  const voiceTyped = $("#voiceTyped");
-  const voiceSend = $("#voiceSend");
-
-  const openVoiceModal = () => {
-    if (!voiceModal) return;
-    if (voiceTitle && VOICE_DEMOS[selectedVoice]) {
-      voiceTitle.textContent = `Demo OUT Voice AI Agent — ${VOICE_DEMOS[selectedVoice].label}`;
+  function mockChatResponse(userText) {
+    const t = userText.toLowerCase();
+    if (t.includes("model y") && (t.includes("under") || t.includes("$"))) {
+      return "Got it. What year range and mileage are you targeting? I can show in-stock options and estimate payments.";
     }
+    if (t.includes("sell") && t.includes("tesla")) {
+      return "Sure — I can help with that. What’s the VIN and mileage? Any notes on condition?";
+    }
+    if (t.includes("trade") || t.includes("trade-in")) {
+      return "Yes — we can discuss trade-in. What are you trading in (year/make/model) and your rough mileage?";
+    }
+    if (t.includes("financ") || t.includes("payment")) {
+      return "I can estimate payments. What’s your budget, credit range (optional), and down payment?";
+    }
+    return "Thanks — I can help. What model/year budget are you looking for, and do you want AWD or Long Range?";
+  }
+
+  // Close with Esc
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      if (chatDrawer && !chatDrawer.hidden) closeChat();
+      if (voiceModal && !voiceModal.hidden) closeVoice();
+    }
+  });
+
+  // -----------------------------
+  // Voice demo modal (browser-only)
+  // -----------------------------
+  const openVoiceButtons = $$("[data-open-voice]");
+  const voiceModal = $("#voiceModal");
+  const closeVoiceButtons = $$("[data-close-voice]");
+  const voiceStatus = $("#voiceStatus");
+  const voiceLog = $("#voiceLog");
+  const startVoiceBtn = $("#startVoiceBtn");
+  const stopVoiceBtn = $("#stopVoiceBtn");
+  const ttsToggle = $("#ttsToggle");
+  const voiceTextForm = $("#voiceTextForm");
+  const voiceTextInput = $("#voiceTextInput");
+
+  let recognition = null;
+  let recognizing = false;
+
+  function setVoiceStatus(s) {
+    if (voiceStatus) voiceStatus.textContent = s;
+  }
+
+  function appendVoiceLine(label, text) {
+    if (!voiceLog) return;
+    const p = document.createElement("p");
+    p.style.margin = "0 0 10px";
+    p.innerHTML = `<strong>${escapeHtml(label)}:</strong> ${escapeHtml(text)}`;
+    voiceLog.appendChild(p);
+    voiceLog.scrollTop = voiceLog.scrollHeight;
+  }
+
+  function speak(text) {
+    try {
+      if (!ttsToggle?.checked) return;
+      if (!("speechSynthesis" in window)) return;
+      const utter = new SpeechSynthesisUtterance(text);
+      window.speechSynthesis.speak(utter);
+    } catch {}
+  }
+
+  function openVoice() {
+    if (!voiceModal) return;
     voiceModal.hidden = false;
-    document.body.style.overflow = "hidden";
-  };
-  const closeVoiceModal = () => {
+    // default selection
+    setDemoMode("voice");
+  }
+
+  function closeVoice() {
     if (!voiceModal) return;
     voiceModal.hidden = true;
-    document.body.style.overflow = "";
-  };
+    stopRecognition();
+  }
 
-  openLiveVoice?.addEventListener("click", openVoiceModal);
-  closeVoice?.addEventListener("click", closeVoiceModal);
+  openVoiceButtons.forEach(btn => btn.addEventListener("click", openVoice));
+  closeVoiceButtons.forEach(btn => btn.addEventListener("click", closeVoice));
+
   voiceModal?.addEventListener("click", (e) => {
-    if (e.target === voiceModal) closeVoiceModal();
+    if (e.target === voiceModal) closeVoice();
   });
 
-  const logLine = (who, text) => {
-    if (!voiceLiveLog) return;
-    const line = document.createElement("div");
-    line.className = "bubble " + (who === "user" ? "user" : "bot");
-    line.textContent = text;
-    voiceLiveLog.appendChild(line);
-    voiceLiveLog.scrollTo({ top: voiceLiveLog.scrollHeight, behavior: "smooth" });
-  };
+  function initRecognition() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) return null;
+    const r = new SpeechRecognition();
+    r.lang = "en-US";
+    r.interimResults = false;
+    r.maxAlternatives = 1;
+    return r;
+  }
 
-  const speak = (text) => {
-    if (!speakResponses?.checked) return;
-    if (!("speechSynthesis" in window)) return;
-    const u = new SpeechSynthesisUtterance(text);
-    u.rate = 1.0;
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(u);
-  };
+  function startRecognition() {
+    if (recognizing) return;
+    if (!recognition) recognition = initRecognition();
 
-  // Minimal "agent" response logic (static)
-  const respond = (prompt) => {
-    const lower = prompt.toLowerCase();
-    if (lower.includes("cash") || lower.includes("offer") || lower.includes("sell")) {
-      return "Sure. For a cash offer: what year, mileage, trim, VIN, and condition? Any accidents or repairs?";
-    }
-    if (lower.includes("model") || lower.includes("ev") || lower.includes("shop") || lower.includes("budget")) {
-      return "Got it. What’s your budget and must-haves (range, seats, color)? I can narrow options and book a test drive.";
-    }
-    return "Thanks. Tell me your goal (shop, trade-in/cash offer, or test drive) and I’ll guide you step-by-step.";
-  };
-
-  voiceSend?.addEventListener("click", () => {
-    const msg = (voiceTyped?.value || "").trim();
-    if (!msg) return;
-    if (voiceTyped) voiceTyped.value = "";
-    logLine("user", msg);
-    const reply = respond(msg);
-    setTimeout(() => {
-      logLine("bot", reply);
-      speak(reply);
-    }, 250);
-  });
-
-  // SpeechRecognition (browser-dependent)
-  let recognition = null;
-  const canRec =
-    "SpeechRecognition" in window || "webkitSpeechRecognition" in window;
-
-  const setVoiceLiveStatus = (text) => {
-    if (voiceLiveStatus) voiceLiveStatus.textContent = "Status: " + text;
-  };
-
-  const startRecognition = () => {
-    if (!canRec) {
-      setVoiceLiveStatus("No speech recognition in this browser. Type instead.");
+    if (!recognition) {
+      setVoiceStatus("Voice not supported on this device/browser");
       return;
     }
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    recognition = new SR();
-    recognition.lang = "en-US";
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
 
-    recognition.onstart = () => setVoiceLiveStatus("Listening…");
-    recognition.onend = () => setVoiceLiveStatus("Idle");
-    recognition.onerror = () => setVoiceLiveStatus("Error");
-    recognition.onresult = (event) => {
-      const text = event.results?.[0]?.[0]?.transcript || "";
-      if (text) {
-        logLine("user", text);
-        const reply = respond(text);
-        setTimeout(() => {
-          logLine("bot", reply);
-          speak(reply);
-        }, 250);
-      }
-    };
-
-    recognition.start();
-  };
-
-  const stopRecognition = () => {
     try {
-      recognition?.stop();
-    } catch {}
-    recognition = null;
-    setVoiceLiveStatus("Idle");
-  };
+      recognition.onresult = (event) => {
+        const text = event.results?.[0]?.[0]?.transcript || "";
+        if (text) handleVoicePrompt(text);
+      };
+      recognition.onerror = () => {
+        setVoiceStatus("Error");
+        stopRecognition();
+      };
+      recognition.onend = () => {
+        // auto-stop state
+        recognizing = false;
+        setVoiceStatus("Idle");
+        if (startVoiceBtn) startVoiceBtn.disabled = false;
+        if (stopVoiceBtn) stopVoiceBtn.disabled = true;
+      };
 
-  startVoice?.addEventListener("click", () => {
-    startVoice.disabled = true;
-    if (stopVoiceBtn) stopVoiceBtn.disabled = false;
-    startRecognition();
-  });
+      recognition.start();
+      recognizing = true;
+      setVoiceStatus("Listening…");
+      if (startVoiceBtn) startVoiceBtn.disabled = true;
+      if (stopVoiceBtn) stopVoiceBtn.disabled = false;
+    } catch {
+      setVoiceStatus("Unable to start voice");
+    }
+  }
 
-  stopVoiceBtn?.addEventListener("click", () => {
-    if (startVoice) startVoice.disabled = false;
+  function stopRecognition() {
+    try { recognition?.stop(); } catch {}
+    recognizing = false;
+    setVoiceStatus("Idle");
+    if (startVoiceBtn) startVoiceBtn.disabled = false;
     if (stopVoiceBtn) stopVoiceBtn.disabled = true;
-    stopRecognition();
+  }
+
+  startVoiceBtn?.addEventListener("click", startRecognition);
+  stopVoiceBtn?.addEventListener("click", stopRecognition);
+
+  function handleVoicePrompt(prompt) {
+    appendVoiceLine("You", prompt);
+    const reply = mockVoiceResponse(prompt);
+    setTimeout(() => {
+      appendVoiceLine("YoYo", reply);
+      speak(reply);
+    }, 450);
+  }
+
+  function mockVoiceResponse(prompt) {
+    const t = (prompt || "").toLowerCase();
+    if (t.includes("model y")) {
+      return "Great. What year range, mileage cap, and budget are you targeting? I can recommend in-stock options and book a callback.";
+    }
+    if (t.includes("model 3")) {
+      return "Sure. Do you want Performance, Long Range, or Standard Range? I can pull matching inventory and send listings.";
+    }
+    if (t.includes("sell") && t.includes("tesla")) {
+      return "I can help intake a seller. What’s the VIN and mileage, and where is the vehicle located?";
+    }
+    return "Got it. Tell me the model, year range, and budget — and I’ll recommend the best matches and schedule next steps.";
+  }
+
+  voiceTextForm?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const val = (voiceTextInput?.value || "").trim();
+    if (!val) return;
+    handleVoicePrompt(val);
+    voiceTextInput.value = "";
   });
 
-  // Global escape key to close overlays
-  document.addEventListener("keydown", (e) => {
-    if (e.key !== "Escape") return;
-    if (voiceModal && !voiceModal.hidden) closeVoiceModal();
-    if (chatDrawer && !chatDrawer.hidden) closeDrawer();
+  // -----------------------------
+  // Contact form stepper
+  // -----------------------------
+  const contactForm = $("#contactForm");
+  const steps = $$(".step", contactForm || document);
+  const nextBtn = $("#nextBtn");
+  const backBtn = $("#backBtn");
+  const progressBars = $$(".progress .bar");
+  const success = $("#formSuccess");
+  const otherBrandsField = $("#otherBrandsField");
+
+  let currentStep = 1;
+
+  function showStep(n) {
+    currentStep = n;
+    steps.forEach(s => s.classList.toggle("active", Number(s.dataset.step) === n));
+    // back button visibility
+    if (backBtn) backBtn.style.visibility = (n === 1) ? "hidden" : "visible";
+
+    // update progress
+    progressBars.forEach((bar, idx) => {
+      bar.classList.toggle("on", idx < n);
+    });
+
+    // next button label
+    if (nextBtn) nextBtn.textContent = (n === 3) ? "Submit" : "Next";
+  }
+
+  function validateStep(n) {
+    // minimal validation: check required inputs in current step
+    const stepEl = steps.find(s => Number(s.dataset.step) === n);
+    if (!stepEl) return true;
+
+    const required = Array.from(stepEl.querySelectorAll("[required]"));
+    let ok = true;
+
+    required.forEach(el => {
+      // Radio groups: only validate once per group
+      if (el.type === "radio") return;
+
+      if (!el.value || !el.value.trim()) {
+        ok = false;
+        el.focus();
+      }
+    });
+
+    // radio group validation
+    const radiosByName = {};
+    stepEl.querySelectorAll("input[type='radio'][required]").forEach(r => {
+      radiosByName[r.name] = radiosByName[r.name] || [];
+      radiosByName[r.name].push(r);
+    });
+    Object.keys(radiosByName).forEach(name => {
+      const group = radiosByName[name];
+      const checked = group.some(r => r.checked);
+      if (!checked) {
+        ok = false;
+        // focus first radio label
+        group[0]?.focus();
+      }
+    });
+
+    return ok;
+  }
+
+  function handleOtherEvsToggle() {
+    const otherEvsYes = contactForm?.querySelector("input[name='other_evs'][value='yes']");
+    const otherEvsNo = contactForm?.querySelector("input[name='other_evs'][value='no']");
+    const show = otherEvsYes?.checked;
+    if (!otherBrandsField) return;
+    otherBrandsField.style.opacity = show ? "1" : "0.45";
+    otherBrandsField.querySelectorAll("input").forEach(i => i.disabled = !show);
+
+    if (!show) {
+      otherBrandsField.querySelectorAll("input").forEach(i => i.checked = false);
+    }
+  }
+
+  contactForm?.addEventListener("change", (e) => {
+    const t = e.target;
+    if (t && t.name === "other_evs") handleOtherEvsToggle();
   });
 
-  // Default tab
-  setActiveTab("chat");
-  setVoiceSelection("cash");
+  nextBtn?.addEventListener("click", () => {
+    if (!contactForm) return;
+    if (currentStep < 3) {
+      if (!validateStep(currentStep)) return;
+      showStep(currentStep + 1);
+      if (currentStep === 3) handleOtherEvsToggle();
+      return;
+    }
+
+    // Submit
+    if (!validateStep(currentStep)) return;
+
+    const data = new FormData(contactForm);
+    const payload = Object.fromEntries(data.entries());
+    // Show in console for dev wiring
+    console.log("Contact Sales payload (front-end only):", payload);
+
+    contactForm.hidden = true;
+    if (success) success.hidden = false;
+  });
+
+  backBtn?.addEventListener("click", () => {
+    if (currentStep > 1) showStep(currentStep - 1);
+  });
+
+  // Initialize
+  showStep(1);
+  if (backBtn) backBtn.style.visibility = "hidden";
+  if (otherBrandsField) {
+    otherBrandsField.style.opacity = "0.45";
+    otherBrandsField.querySelectorAll("input").forEach(i => i.disabled = true);
+  }
+
+  // Utility
+  function escapeHtml(s) {
+    return String(s)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
 })();
