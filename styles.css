@@ -90,13 +90,15 @@ a:hover{ text-decoration: underline; }
 
 .nav{
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  height: 66px;
+  gap: 12px;
+  padding: 10px 0;
 }
 
 .brand{
+  order: 1;
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -127,18 +129,44 @@ a:hover{ text-decoration: underline; }
 .brand-name{ font-weight: 800; }
 
 .nav-links{
-  display: none;
-  gap: 18px;
-  color: var(--muted);
-  font-weight: 600;
+  order: 3;
+  display: flex;
+  flex-basis: 100%;
+  gap: 12px;
+  font-weight: 700;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  padding: 6px 0 10px;
 }
-.nav-links a{ padding: 6px 8px; border-radius: 10px; }
+.nav-links a{
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: var(--primary);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: rgba(59, 130, 246, 0.55);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
 .nav-links a:hover{
-  text-decoration: none;
-  background: rgba(16, 24, 40, 0.06);
+  text-decoration-style: solid;
+  text-decoration-color: rgba(59, 130, 246, 1);
+  background: rgba(59, 130, 246, 0.10);
+}
+.nav-links a:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+  background: rgba(59, 130, 246, 0.12);
+  text-decoration-style: solid;
+}
+.nav-links a[aria-current="page"]{
+  background: rgba(59, 130, 246, 0.12);
+  text-decoration-style: solid;
+  text-decoration-color: rgba(59, 130, 246, 1);
 }
 
-.nav-cta{ display: flex; gap: 10px; align-items: center; }
+.nav-cta{ order: 2; display: flex; gap: 10px; align-items: center; }
 
 .btn{
   display: inline-flex;
@@ -820,7 +848,9 @@ a:hover{ text-decoration: underline; }
 
 /* Responsive */
 @media (min-width: 860px){
-  .nav-links{ display: flex; }
+  .nav{ flex-wrap: nowrap; height: 66px; padding: 0; gap: 16px; }
+  .brand, .nav-links, .nav-cta{ order: 0; }
+  .nav-links{ flex-basis: auto; padding: 0; overflow: visible; }
   .cards{ grid-template-columns: 1fr 1fr; }
   .cards.cards-single{ grid-template-columns: 1fr; }
   .contact-grid{ grid-template-columns: 1.1fr 1fr; }
