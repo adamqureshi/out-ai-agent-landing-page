@@ -5,9 +5,11 @@ This repo is a **static landing page** template for OnlyUsedTesla.ai / OUT AI Ag
 ## What's included
 - Hero section
 - Demo selection (Chat AI Agent + Voice AI Agent)
+- Pricing page
 - Contact Sales section (split layout like ElevenLabs) with a simple multi-step form (front-end only)
 - Chat demo drawer (front-end only)
 - Voice demo modal (browser speech features where supported)
+- "Shop Used Tesla" placeholder page
 
 ## Deploy
 Host anywhere static:

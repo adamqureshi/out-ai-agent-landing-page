@@ -1048,3 +1048,215 @@ a:hover{ text-decoration: underline; }
   .voice-ui-sel{ min-width: 220px; }
   .voice-ui-sel + .voice-ui-sel{ margin-top: 0; }
 }
+
+/* =============================
+   Pricing page
+============================= */
+
+.pricing-hero {
+  padding: 56px 0 28px;
+}
+
+.pricing-hero .lead {
+  max-width: 72ch;
+}
+
+.pricing-proof {
+  margin-top: 18px;
+  max-width: 78ch;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--card) 90%, white);
+  border-radius: 14px;
+}
+
+.pricing-plans {
+  padding: 44px 0;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 16px;
+}
+
+.plan-card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.plan-card h3 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.plan-sub {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+.plan-price {
+  margin-top: 14px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.plan-price .price {
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.plan-price .per {
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.plan-price .usage {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.plan-list {
+  margin: 14px 0 0;
+  padding-left: 18px;
+  color: var(--text);
+}
+
+.plan-list li {
+  margin: 8px 0;
+}
+
+.plan-actions {
+  margin-top: auto;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-top: 14px;
+}
+
+.plan-fine {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.plan-featured {
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+  box-shadow: 0 10px 30px rgba(26, 115, 232, 0.12);
+}
+
+.plan-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--text);
+  color: white;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.pricing-note {
+  margin-top: 18px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--card) 92%, white);
+  border-radius: 14px;
+}
+
+.pricing-how,
+.pricing-faq,
+.pricing-cta {
+  padding: 44px 0;
+}
+
+.pricing-steps {
+  margin: 14px 0 0;
+  padding-left: 18px;
+  color: var(--text);
+}
+
+.pricing-steps li {
+  margin: 10px 0;
+  line-height: 1.5;
+}
+
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.faq {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.faq summary {
+  cursor: pointer;
+  font-weight: 800;
+  list-style: none;
+}
+
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq p {
+  margin: 10px 0 0;
+  color: var(--muted);
+}
+
+.cta-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: var(--shadow-sm);
+}
+
+.cta-card h2 {
+  margin: 0;
+}
+
+.cta-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 980px) {
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .faq-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
