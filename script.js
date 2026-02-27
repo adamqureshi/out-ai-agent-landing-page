@@ -232,6 +232,9 @@
   const chatInput = $("#chatInput");
   const openChatButtons = $$("[data-open-chat]");
   const closeDrawerButtons = $$("[data-close-drawer]");
+  const chatImageInput = $("#chatImageInput");
+  const chatAttach = $("#chatAttach");
+  const chatAttachments = $("#chatAttachments");
 
   function openChat() {
     if (!chatDrawer) return;
@@ -242,6 +245,8 @@
   function closeChat() {
     if (!chatDrawer) return;
     chatDrawer.hidden = true;
+    chatDrawer.classList.remove("dragging");
+    clearAttachments();
   }
 
   launcher?.addEventListener("click", openChat);
@@ -252,26 +257,170 @@
     // click outside? (not implemented — drawer is anchored)
   });
 
-  function addMsg(text, who="ai") {
+  
+  // Chat attachments (images) — front-end only
+  let pendingImages = [];
+
+  function renderAttachments() {
+    if (!chatAttachments) return;
+    chatAttachments.innerHTML = "";
+    if (!pendingImages.length) {
+      chatAttachments.hidden = true;
+      return;
+    }
+    chatAttachments.hidden = false;
+
+    pendingImages.forEach((item, idx) => {
+      const chip = document.createElement("div");
+      chip.className = "attachment-chip";
+
+      const img = document.createElement("img");
+      img.src = item.url;
+      img.alt = item.file?.name ? `Attachment: ${item.file.name}` : "Attachment";
+
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "attachment-remove";
+      remove.setAttribute("aria-label", "Remove attachment");
+      remove.textContent = "×";
+      remove.addEventListener("click", () => {
+        try { URL.revokeObjectURL(item.url); } catch {}
+        pendingImages = pendingImages.filter((_, i) => i !== idx);
+        renderAttachments();
+      });
+
+      chip.appendChild(img);
+      chip.appendChild(remove);
+      chatAttachments.appendChild(chip);
+    });
+  }
+
+  function addImageFiles(fileList) {
+    if (!fileList) return;
+    const files = Array.from(fileList).filter((f) => f && f.type && f.type.startsWith("image/"));
+    if (!files.length) return;
+
+    files.slice(0, 6).forEach((file) => {
+      const url = URL.createObjectURL(file);
+      pendingImages.push({ file, url });
+    });
+
+    // Keep a reasonable cap so the UI stays clean.
+    if (pendingImages.length > 6) {
+      pendingImages = pendingImages.slice(0, 6);
+    }
+    renderAttachments();
+  }
+
+  function clearAttachments() {
+    if (!pendingImages.length) return;
+    pendingImages.forEach((item) => {
+      try { URL.revokeObjectURL(item.url); } catch {}
+    });
+    pendingImages = [];
+    renderAttachments();
+  }
+
+  chatAttach?.addEventListener("click", () => chatImageInput?.click());
+  chatImageInput?.addEventListener("change", (e) => {
+    addImageFiles(e.target.files);
+    e.target.value = "";
+  });
+
+  if (chatDrawer) {
+    const dragOn = (e) => {
+      e.preventDefault();
+      chatDrawer.classList.add("dragging");
+    };
+    const dragOff = (e) => {
+      e.preventDefault();
+      chatDrawer.classList.remove("dragging");
+    };
+
+    ["dragenter", "dragover"].forEach((evt) => chatDrawer.addEventListener(evt, dragOn));
+    ["dragleave", "drop"].forEach((evt) => chatDrawer.addEventListener(evt, dragOff));
+
+    chatDrawer.addEventListener("drop", (e) => {
+      addImageFiles(e.dataTransfer?.files);
+    });
+  }
+
+function addMsg(payload, who="ai") {
     if (!chatMessages) return;
+
     const div = document.createElement("div");
     div.className = `msg ${who}`;
-    div.textContent = text;
+
+    let text = "";
+    let images = [];
+
+    if (typeof payload === "string") {
+      text = payload;
+    } else if (payload && typeof payload === "object") {
+      text = payload.text || "";
+      images = Array.isArray(payload.images) ? payload.images : [];
+    }
+
+    if (images.length) {
+      const grid = document.createElement("div");
+      grid.className = "msg-images";
+      images.slice(0, 6).forEach((url) => {
+        const img = document.createElement("img");
+        img.src = url;
+        img.alt = "Uploaded image";
+        img.loading = "lazy";
+        grid.appendChild(img);
+      });
+      div.appendChild(grid);
+    }
+
+    if (text) {
+      const t = document.createElement("div");
+      t.className = "msg-text";
+      t.textContent = text;
+      div.appendChild(t);
+    }
+
+    if (!text && !images.length) return;
+
     chatMessages.appendChild(div);
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 
+
   chatForm?.addEventListener("submit", (e) => {
     e.preventDefault();
-    const val = (chatInput?.value || "").trim();
-    if (!val) return;
-    addMsg(val, "user");
-    chatInput.value = "";
 
-    // lightweight mocked response
-    const response = mockChatResponse(val);
-    setTimeout(() => addMsg(response, "ai"), 350);
+    const text = (chatInput?.value || "").trim();
+    const images = pendingImages.map((p) => p.url);
+
+    if (!text && !images.length) return;
+
+    addMsg({ text, images }, "user");
+    if (chatInput) chatInput.value = "";
+    clearAttachments();
+
+    const lower = text.toLowerCase();
+    let resp =
+      "Got it — want me to narrow by budget and location, or by model/year?";
+
+    if (!text && images.length) {
+      resp =
+        "Thanks — I received the photo(s). What would you like to know (price, features, trade-in, or test drive)?";
+    } else if (lower.includes("model 3")) {
+      resp =
+        "Yes — we do. Want Long Range or Performance? And what price range are you targeting?";
+    } else if (lower.includes("model y")) {
+      resp =
+        "Model Y is popular right now. Do you want Long Range or Performance? Any must-have options?";
+    } else if (lower.includes("cash offer") || lower.includes("sell")) {
+      resp =
+        "I can help with a cash offer. What’s the VIN (or license plate), mileage, and your ZIP code?";
+    }
+
+    setTimeout(() => addMsg({ text: resp }, "ai"), 520);
   });
+
 
   function mockChatResponse(userText) {
     const t = userText.toLowerCase();
@@ -311,6 +460,42 @@
   const ttsToggle = $("#ttsToggle");
   const voiceTextForm = $("#voiceTextForm");
   const voiceTextInput = $("#voiceTextInput");
+  // Non-blocking voice consent (stored locally in the browser)
+  const VOICE_CONSENT_KEY = "yoyo_voice_consent_v1";
+  const voiceConsent = $("#yoyoConsent");
+  const voiceConsentAccept = $("#yoyoConsentAccept");
+  const voiceConsentDismiss = $("#yoyoConsentDismiss");
+
+  function hasVoiceConsent(){
+    try{
+      return localStorage.getItem(VOICE_CONSENT_KEY) === "true";
+    }catch{
+      return false;
+    }
+  }
+
+  function showVoiceConsent(){
+    if(!voiceConsent) return;
+    voiceConsent.hidden = false;
+  }
+
+  function hideVoiceConsent(){
+    if(!voiceConsent) return;
+    voiceConsent.hidden = true;
+  }
+
+  voiceConsentAccept?.addEventListener("click", () => {
+    try{
+      localStorage.setItem(VOICE_CONSENT_KEY, "true");
+    }catch{}
+    hideVoiceConsent();
+    openVoice(true);
+  });
+
+  voiceConsentDismiss?.addEventListener("click", () => {
+    hideVoiceConsent();
+  });
+
 
   let recognition = null;
   let recognizing = false;
@@ -337,11 +522,21 @@
     } catch {}
   }
 
-  function openVoice() {
-    if (!voiceModal) return;
+  function openVoice(force = false) {
+    if (!voiceModal) return false;
+
+    if (!force && !hasVoiceConsent()) {
+      showVoiceConsent();
+      return false;
+    }
+
+    hideVoiceConsent();
+    closeChat();
+
     voiceModal.hidden = false;
     // default selection
     setDemoMode("voice");
+    return true;
   }
 
   function closeVoice() {
@@ -350,7 +545,7 @@
     stopRecognition();
   }
 
-  openVoiceButtons.forEach(btn => btn.addEventListener("click", openVoice));
+  openVoiceButtons.forEach(btn => btn.addEventListener("click", () => openVoice()));
   closeVoiceButtons.forEach(btn => btn.addEventListener("click", closeVoice));
 
   voiceModal?.addEventListener("click", (e) => {
