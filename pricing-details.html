@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="description" content="YoYo pricing tiers & feature structure — full feature matrix and availability status."/>
+  <title>Pricing details | YoYo Dealership AI</title>
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <img class="brand-icon" src="yoyo-icon.png" alt="YoYo"/>
+        <span class="brand-name">YoYo</span>
+      </a>
+
+      <nav aria-label="Primary" class="nav-links">
+        <a class="nav-link" href="shop-used-tesla.html">Shop Used Tesla</a>
+        <a class="nav-link" href="index.html">Dealership AI</a>
+        <a class="nav-link" href="pricing.html">Pricing</a>
+        <a class="nav-link" href="index.html#demo">Demo</a>
+        <a class="nav-link" href="index.html#contact">Contact</a>
+      </nav>
+
+      <div class="nav-cta">
+        <a class="btn btn-secondary" href="index.html#signin">SIGN IN</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="details-hero">
+      <div class="container">
+        <p class="eyebrow">Pricing details</p>
+        <h1 class="h1">YoYo SaaS — pricing tiers &amp; feature structure</h1>
+        <p class="lead details-lead">
+          This page maps features to each plan and shows what’s <strong>available now</strong> vs <strong>in development</strong>.
+          It’s designed for stakeholders who want the full breakdown.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-secondary btn-lg" href="pricing.html">Back to pricing</a>
+          <a class="btn btn-primary btn-lg" href="index.html#contact">Contact sales</a>
+        </div>
+
+        <div class="details-legend" aria-label="Availability legend">
+          <span class="chip chip-now">Available</span>
+          <span class="legend-text">Already live</span>
+          <span class="chip chip-pilot">In progress</span>
+          <span class="legend-text">Partially built / in pilot</span>
+          <span class="chip chip-roadmap">Planned</span>
+          <span class="legend-text">Roadmap item</span>
+        </div>
+
+        <div class="details-callout">
+          <p>
+            <strong>Context:</strong> YoYo is a B2B SaaS for auto dealers. Dealers subscribe, and their customers interact through
+            chat widgets (and optional voice/calling experiences).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="details-section" aria-label="Pricing overview">
+      <div class="container">
+        <h2>Pricing overview</h2>
+        <div class="table-wrap">
+          <table class="overview-table">
+            <thead>
+              <tr>
+                <th>Tier</th>
+                <th>Price</th>
+                <th>Trial</th>
+                <th>Target</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Essential</strong></td>
+                <td>$199/mo</td>
+                <td>14 days</td>
+                <td>Small dealers getting started</td>
+              </tr>
+              <tr>
+                <td><strong>Advanced</strong></td>
+                <td>$399/mo</td>
+                <td>14 days</td>
+                <td>Mid-size dealers wanting inventory automation</td>
+              </tr>
+              <tr>
+                <td><strong>Expert</strong></td>
+                <td>$499/mo</td>
+                <td>14 days</td>
+                <td>Enterprise dealers / full funnel</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="muted details-note">
+          All tiers include onboarding + configuration during the pilot. Roadmap items are confirmed during onboarding.
+        </p>
+      </div>
+    </section>
+
+    <section class="details-section" aria-label="Feature matrix">
+      <div class="container">
+        <h2>Feature matrix</h2>
+        <p class="muted">
+          Legend: <strong>✓</strong> included · <strong>—</strong> not included.
+        </p>
+
+        <div class="table-wrap">
+          <table class="matrix-table">
+            <thead>
+              <tr>
+                <th style="width:56px;">#</th>
+                <th>Feature</th>
+                <th>Essential</th>
+                <th>Advanced</th>
+                <th>Expert</th>
+                <th>Build status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="matrix-group"><th colspan="6">💬 Core AI Chat</th></tr>
+              <tr>
+                <td>1</td>
+                <td>Chat Bubble Widget (embeddable)</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-now">Available</span></td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Full Chat Experience (standalone page)</td>
+                <td class="cell-no">—</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-now">Available</span></td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Buyer Intent Detection</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-now">Available</span></td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>Seller Intent Detection</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-now">Available</span></td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>Sell Flow (VIN decode, lead capture)</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-now">Available</span></td>
+              </tr>
+              <tr>
+                <td>6</td>
+                <td>Chat History (logged-in users)</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-pilot">In progress</span></td>
+              </tr>
+              <tr>
+                <td>7</td>
+                <td>Guest Chat (no login required)</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-now">Available</span></td>
+              </tr>
+              <tr>
+                <td>8</td>
+                <td>AI Persona Customization</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-now">Available</span></td>
+              </tr>
+
+              <tr class="matrix-group"><th colspan="6">🔍 Knowledge &amp; Scraping</th></tr>
+              <tr>
+                <td>9</td>
+                <td>Website Scraping (auto-populate knowledge base)</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-now">Available</span></td>
+              </tr>
+              <tr>
+                <td>10</td>
+                <td>Knowledge Base Q&amp;A</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-now">Available</span></td>
+              </tr>
+              <tr>
+                <td>11</td>
+                <td>Knowledge Base Management (CRUD)</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-pilot">In progress</span></td>
+              </tr>
+
+              <tr class="matrix-group"><th colspan="6">👤 Handover &amp; Takeover</th></tr>
+              <tr>
+                <td>12</td>
+                <td>AI Handover (AI stops, notifies human)</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-pilot">In progress</span></td>
+              </tr>
+              <tr>
+                <td>13</td>
+                <td>Slack notifications on handover</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-now">Available</span></td>
+              </tr>
+              <tr>
+                <td>13a</td>
+                <td>Email notifications (configurable per event)</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-pilot">In progress</span></td>
+              </tr>
+              <tr>
+                <td>13b</td>
+                <td>SMS notifications (configurable per event)</td>
+                <td class="cell-no">—</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-roadmap">Planned</span></td>
+              </tr>
+              <tr>
+                <td>13c</td>
+                <td>Live takeover (human takes control from AI)</td>
+                <td class="cell-no">—</td>
+                <td class="cell-no">—</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-roadmap">Planned</span></td>
+              </tr>
+
+              <tr class="matrix-group"><th colspan="6">📊 Analytics &amp; Leads</th></tr>
+              <tr>
+                <td>14</td>
+                <td>Basic analytics dashboard</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-pilot">In progress</span></td>
+              </tr>
+              <tr>
+                <td>15</td>
+                <td>Lead capture &amp; management</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-pilot">In progress</span></td>
+              </tr>
+              <tr>
+                <td>16</td>
+                <td>Advanced analytics (funnels, trends)</td>
+                <td class="cell-no">—</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-roadmap">Planned</span></td>
+              </tr>
+
+              <tr class="matrix-group"><th colspan="6">🔗 Inventory integration</th></tr>
+              <tr>
+                <td>17</td>
+                <td>Inventory API connector</td>
+                <td class="cell-no">—</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-now">Available</span></td>
+              </tr>
+              <tr>
+                <td>18</td>
+                <td>Vehicle search via chat</td>
+                <td class="cell-no">—</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-now">Available</span></td>
+              </tr>
+              <tr>
+                <td>19</td>
+                <td>Inventory browsing UI</td>
+                <td class="cell-no">—</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-roadmap">Planned</span></td>
+              </tr>
+
+              <tr class="matrix-group"><th colspan="6">🎙️ Voice AI agent</th></tr>
+              <tr>
+                <td>20</td>
+                <td>Voice AI chat agent (inbound)</td>
+                <td class="cell-no">—</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-roadmap">Planned</span></td>
+              </tr>
+              <tr>
+                <td>21</td>
+                <td>Voice-to-text transcription</td>
+                <td class="cell-no">—</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-roadmap">Planned</span></td>
+              </tr>
+
+              <tr class="matrix-group"><th colspan="6">📞 Outbound AI calling</th></tr>
+              <tr>
+                <td>22</td>
+                <td>AI agent outbound calling</td>
+                <td class="cell-no">—</td>
+                <td class="cell-no">—</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-roadmap">Planned</span></td>
+              </tr>
+              <tr>
+                <td>23</td>
+                <td>Call scheduling &amp; queue</td>
+                <td class="cell-no">—</td>
+                <td class="cell-no">—</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-roadmap">Planned</span></td>
+              </tr>
+              <tr>
+                <td>24</td>
+                <td>Call transcripts &amp; summaries</td>
+                <td class="cell-no">—</td>
+                <td class="cell-no">—</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-roadmap">Planned</span></td>
+              </tr>
+
+              <tr class="matrix-group"><th colspan="6">🛠️ Dealer management</th></tr>
+              <tr>
+                <td>25</td>
+                <td>Dealer dashboard</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-pilot">In progress</span></td>
+              </tr>
+              <tr>
+                <td>26</td>
+                <td>Widget branding customization</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-now">Available</span></td>
+              </tr>
+              <tr>
+                <td>27</td>
+                <td>Multi-user dealer access</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-pilot">In progress</span></td>
+              </tr>
+
+              <tr class="matrix-group"><th colspan="6">⚙️ Platform</th></tr>
+              <tr>
+                <td>28</td>
+                <td>Admin console (YoYo internal)</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-now">Available</span></td>
+              </tr>
+              <tr>
+                <td>29</td>
+                <td>Stripe subscription billing</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-pilot">In progress</span></td>
+              </tr>
+              <tr>
+                <td>30</td>
+                <td>Email notifications (templates + transactional setup)</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td class="cell-yes">✓</td>
+                <td><span class="chip chip-pilot">In progress</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="details-note">
+          <strong>Note:</strong> “In progress” and “Planned” items are delivered as part of the product roadmap.
+          For any given pilot, we’ll confirm what’s live and what’s scheduled next.
+        </p>
+      </div>
+    </section>
+
+    <section class="details-section" aria-label="Tier breakdown">
+      <div class="container">
+        <h2>Tier breakdown (plain-English)</h2>
+
+        <div class="tier-grid">
+          <article class="tier-card">
+            <h3>🟢 Essential — AI Chat Foundation</h3>
+            <p class="muted">A 24/7 AI receptionist that answers questions and captures leads on your website.</p>
+            <ul class="tier-list">
+              <li><strong>Website chat widget</strong> that works for buyers and sellers.</li>
+              <li><strong>Policy-trained answers</strong> (warranty, deposits, shipping, financing FAQs) based on your site.</li>
+              <li><strong>Seller intake</strong>: VIN decode → vehicle details → lead capture.</li>
+              <li><strong>Handoff to your team</strong> with a clean conversation summary (Slack).</li>
+              <li><strong>Brand controls</strong>: tone, disclaimers, assistant name, colors.</li>
+            </ul>
+            <div class="tier-callout">
+              <p><strong>Upgrade trigger:</strong> If shoppers ask “What’s in stock?” or “Show me Model 3 under $40k”, Advanced unlocks inventory search.</p>
+            </div>
+          </article>
+
+          <article class="tier-card">
+            <h3>🔵 Advanced — Full Automation</h3>
+            <p class="muted">Adds a shopping agent trained on your inventory feed to create higher-intent test-drive leads.</p>
+            <ul class="tier-list">
+              <li><strong>Everything in Essential</strong> included.</li>
+              <li><strong>Inventory feed integration</strong> (CSV/XML/API) so YoYo can search current stock.</li>
+              <li><strong>Shopping guidance</strong>: recommendations, trim/feature comparisons, and next steps.</li>
+              <li><strong>Intent capture</strong>: budget, must-haves, preferred vehicle(s), readiness to buy.</li>
+              <li><strong>Optional roadmap items</strong>: voice + SMS alerts + richer vehicle cards.</li>
+            </ul>
+          </article>
+
+          <article class="tier-card">
+            <h3>🟣 Expert — AI Sales Team</h3>
+            <p class="muted">Designed for full-funnel operations, including tighter handoff workflows and future takeover/calling.</p>
+            <ul class="tier-list">
+              <li><strong>Everything in Advanced</strong> included.</li>
+              <li><strong>Cash-offer style seller intake</strong> optimized for fast appraisal workflows.</li>
+              <li><strong>Human-in-the-loop escalation</strong> (handoff with context; takeover UI on roadmap).</li>
+              <li><strong>Optional roadmap items</strong>: outbound calling agent, scheduling, transcripts/summaries.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider"/>
+
+    <section class="pricing-cta" aria-label="Contact sales call to action">
+      <div class="container">
+        <div class="cta-card">
+          <div>
+            <h2>Want a quick quote?</h2>
+            <p class="muted">Tell me what you sell, how many rooftops, and what your inventory feed looks like.</p>
+          </div>
+          <div class="cta-actions">
+            <a class="btn btn-primary btn-lg" href="index.html#contact">Contact sales</a>
+            <a class="btn btn-secondary btn-lg" href="pricing.html">Back to pricing</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer">
+      <p>© <span id="year"></span> YoYo. Built for dealerships. </p>
+      <div class="footer-links">
+        <a href="index.html#contact">Contact</a>
+        <a href="pricing.html">Pricing</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

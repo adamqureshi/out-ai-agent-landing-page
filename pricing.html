@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <meta name="description" content="YoYo pricing for dealership AI — chat, voice, shopping, and cash-offer agents."/>
+  <meta name="description" content="YoYo pricing for dealership AI — chat, shopping, and sales workflow automation."/>
   <title>Pricing | YoYo Dealership AI</title>
   <link rel="icon" type="image/png" href="favicon.png"/>
   <link rel="stylesheet" href="styles.css"/>
@@ -66,24 +66,86 @@
             Start small. Add capabilities as you see ROI.
             <span class="muted">All plans include onboarding + configuration during your pilot.</span>
           </p>
+          <div class="section-subactions">
+            <a class="text-link" href="pricing-details.html">View the full feature matrix →</a>
+          </div>
+        </div>
+
+        <div class="plan-legend" aria-label="Availability legend">
+          <span class="chip chip-now">Available</span>
+          <span class="legend-text">Available now</span>
+          <span class="chip chip-pilot">In progress</span>
+          <span class="legend-text">In development / pilot</span>
+          <span class="chip chip-roadmap">Planned</span>
+          <span class="legend-text">Roadmap</span>
         </div>
 
         <div class="pricing-grid">
+          <!-- =====================
+               ESSENTIAL
+               ===================== -->
           <article class="plan-card">
             <header class="plan-head">
               <h3>Essential</h3>
-              <p class="plan-sub">Website chat + lead capture, trained to your policies.</p>
+              <p class="plan-sub">AI chat + lead capture, trained to your policies.</p>
             </header>
 
             <div class="plan-price">
               <span class="price">$199</span><span class="per">/month</span>
+              <span class="usage">14-day pilot</span>
             </div>
 
             <ul class="plan-list">
-              <li>Website chat + lead capture</li>
-              <li>FAQ + policy responses (warranty, deposits, shipping, etc.)</li>
-              <li>Clean handoff summary to your team (email/CRM wiring later)</li>
+              <li><strong>Capture leads 24/7</strong> from buyers + sellers</li>
+              <li><strong>Instant answers</strong> to FAQs, policies, and “do you offer…?” questions</li>
+              <li><strong>Clean handoff</strong> to your team with conversation summary (Slack)</li>
+              <li><strong>Brand-matched</strong> tone, disclaimers, and escalation rules</li>
             </ul>
+
+            <details class="plan-more">
+              <summary>Read more</summary>
+              <div class="plan-more-body">
+                <div class="plan-more-section">
+                  <h4>Website AI chat</h4>
+                  <ul class="feature-list">
+                    <li><span class="chip chip-now">Available</span> Embeddable chat bubble widget</li>
+                    <li><span class="chip chip-now">Available</span> Buyer + seller intent detection (routes the conversation)</li>
+                    <li><span class="chip chip-now">Available</span> Guest chat (no login required)</li>
+                    <li><span class="chip chip-now">Available</span> Persona + tone settings (match your brand)</li>
+                  </ul>
+                </div>
+
+                <div class="plan-more-section">
+                  <h4>Seller intake + lead capture</h4>
+                  <ul class="feature-list">
+                    <li><span class="chip chip-now">Available</span> Guided sell flow (VIN decode → details → mileage/condition → optional photos)</li>
+                    <li><span class="chip chip-pilot">In progress</span> Logged-in chat history UI for returning customers</li>
+                    <li><span class="chip chip-pilot">In progress</span> Dealer dashboard views for conversations + leads</li>
+                  </ul>
+                </div>
+
+                <div class="plan-more-section">
+                  <h4>Knowledge base</h4>
+                  <ul class="feature-list">
+                    <li><span class="chip chip-now">Available</span> Website scraping to auto-populate Q&amp;A</li>
+                    <li><span class="chip chip-now">Available</span> Policy/FAQ answers grounded in your website content</li>
+                    <li><span class="chip chip-pilot">In progress</span> Knowledge base editor in the dealer dashboard</li>
+                  </ul>
+                </div>
+
+                <div class="plan-more-section">
+                  <h4>Team handoff</h4>
+                  <ul class="feature-list">
+                    <li><span class="chip chip-now">Available</span> Slack notifications with a clean summary on escalation</li>
+                    <li><span class="chip chip-pilot">In progress</span> Configurable email notifications (event-based)</li>
+                  </ul>
+                </div>
+
+                <p class="plan-more-note">
+                  Want <strong>inventory shopping</strong> or <strong>voice</strong>? Those live in Advanced.
+                </p>
+              </div>
+            </details>
 
             <div class="plan-actions">
               <a class="btn btn-primary" href="index.html#contact">Start a pilot</a>
@@ -92,6 +154,9 @@
             <p class="plan-fine">Best for: getting live on your website in days.</p>
           </article>
 
+          <!-- =====================
+               ADVANCED
+               ===================== -->
           <article class="plan-card plan-featured" aria-label="Featured plan">
             <div class="plan-badge">Most popular</div>
 
@@ -102,50 +167,130 @@
 
             <div class="plan-price">
               <span class="price">$399</span><span class="per">/month</span>
+              <span class="usage">14-day pilot</span>
             </div>
 
             <ul class="plan-list">
-              <li>Connect your inventory feed (CSV / XML / API)</li>
-              <li>Recommendations + trim / feature comparisons</li>
-              <li>Guides customers through features and next steps</li>
-              <li>Captures buying intent + preferred vehicle details</li>
+              <li><strong>Everything in Essential</strong> included</li>
+              <li><strong>Inventory search</strong> from your feed (CSV / XML / API)</li>
+              <li><strong>Recommendations</strong> + trim / feature comparisons for shoppers</li>
+              <li><strong>Higher-intent leads</strong>: captures budget, must-haves, and preferred vehicles</li>
             </ul>
+
+            <details class="plan-more">
+              <summary>Read more</summary>
+              <div class="plan-more-body">
+                <div class="plan-more-section">
+                  <h4>Inventory shopping</h4>
+                  <ul class="feature-list">
+                    <li><span class="chip chip-now">Available</span> Inventory feed connector (CSV / XML / API)</li>
+                    <li><span class="chip chip-now">Available</span> Vehicle search via chat (budget, model, year, mileage, etc.)</li>
+                    <li><span class="chip chip-now">Available</span> Guided shopping: next steps, deposits, and test-drive intent capture</li>
+                    <li><span class="chip chip-roadmap">Planned</span> Inventory browsing UI (vehicle cards + filters)</li>
+                  </ul>
+                </div>
+
+                <div class="plan-more-section">
+                  <h4>Richer chat experience</h4>
+                  <ul class="feature-list">
+                    <li><span class="chip chip-now">Available</span> Standalone full-chat page (beyond the bubble)</li>
+                    <li><span class="chip chip-roadmap">Planned</span> Visual vehicle cards + image carousels inside chat</li>
+                  </ul>
+                </div>
+
+                <div class="plan-more-section">
+                  <h4>Notifications + analytics</h4>
+                  <ul class="feature-list">
+                    <li><span class="chip chip-pilot">In progress</span> Dealer-facing analytics dashboard (conversations, leads)</li>
+                    <li><span class="chip chip-roadmap">Planned</span> Advanced analytics (funnels, trends, peak-hour insights)</li>
+                    <li><span class="chip chip-roadmap">Planned</span> SMS notifications (configurable per event)</li>
+                  </ul>
+                </div>
+
+                <div class="plan-more-section">
+                  <h4>Voice (optional)</h4>
+                  <ul class="feature-list">
+                    <li><span class="chip chip-roadmap">Planned</span> Voice AI on the widget (talk to YoYo, get spoken responses)</li>
+                    <li><span class="chip chip-roadmap">Planned</span> Voice-to-text transcription</li>
+                  </ul>
+                </div>
+
+                <p class="plan-more-note">
+                  Need a <strong>full funnel</strong> with takeover + outbound follow-ups? That’s Expert.
+                </p>
+              </div>
+            </details>
 
             <div class="plan-actions">
               <a class="btn btn-primary" href="index.html#contact">Start a pilot</a>
               <a class="btn btn-secondary" href="index.html#demo">See the demo</a>
             </div>
 
-            <p class="plan-fine">
-              Best for: dealers who want more high-intent test-drive leads.
-            </p>
+            <p class="plan-fine">Best for: dealers who want more high-intent test-drive leads.</p>
           </article>
 
+          <!-- =====================
+               EXPERT
+               ===================== -->
           <article class="plan-card">
             <header class="plan-head">
               <h3>Expert</h3>
-              <p class="plan-sub">Everything + sales handoff + cash-offer intake.</p>
+              <p class="plan-sub">Everything + sales handoff + cash-offer workflows.</p>
             </header>
 
             <div class="plan-price">
               <span class="price">$499</span><span class="per">/month</span>
+              <span class="usage">14-day pilot</span>
             </div>
 
             <ul class="plan-list">
-              <li>Everything in Essential + Advanced</li>
-              <li>Human-in-the-loop handoff to your sales team</li>
-              <li>Takeover-ready: your team can jump in and close</li>
-              <li>Cash offer intake (VIN/mileage/condition/photos optional)</li>
-              <li>Trained on your inventory + website content</li>
+              <li><strong>Everything in Essential + Advanced</strong></li>
+              <li><strong>Human-in-the-loop escalation</strong> (handoff with context)</li>
+              <li><strong>Seller intake</strong> optimized for cash-offer requests</li>
+              <li><strong>Takeover-ready</strong> (live takeover is on the roadmap)</li>
             </ul>
+
+            <details class="plan-more">
+              <summary>Read more</summary>
+              <div class="plan-more-body">
+                <div class="plan-more-section">
+                  <h4>Handoff + takeover</h4>
+                  <ul class="feature-list">
+                    <li><span class="chip chip-now">Available</span> AI escalation + team notifications (Slack)</li>
+                    <li><span class="chip chip-pilot">In progress</span> Email notifications (configurable triggers)</li>
+                    <li><span class="chip chip-roadmap">Planned</span> Live takeover (agent can jump into the conversation)</li>
+                  </ul>
+                </div>
+
+                <div class="plan-more-section">
+                  <h4>Cash-offer workflows</h4>
+                  <ul class="feature-list">
+                    <li><span class="chip chip-now">Available</span> Seller intake (VIN, mileage, condition, optional photos)</li>
+                    <li><span class="chip chip-now">Available</span> Clean summary sent to your team so you can price faster</li>
+                  </ul>
+                </div>
+
+                <div class="plan-more-section">
+                  <h4>Outbound follow-up (optional)</h4>
+                  <ul class="feature-list">
+                    <li><span class="chip chip-roadmap">Planned</span> AI outbound calling to follow up with leads</li>
+                    <li><span class="chip chip-roadmap">Planned</span> Call scheduling / queue management</li>
+                    <li><span class="chip chip-roadmap">Planned</span> Call transcripts + summaries stored in the dashboard</li>
+                  </ul>
+                </div>
+
+                <p class="plan-more-note">
+                  Expert is the “full funnel” plan. If you need <strong>DMS/CRM integrations</strong> or multi-rooftop rollout,
+                  we’ll scope it with your corporate team.
+                </p>
+              </div>
+            </details>
 
             <div class="plan-actions">
               <a class="btn btn-primary" href="index.html#contact">Contact sales</a>
             </div>
 
-            <p class="plan-fine">
-              Best for: rooftops that want the full funnel.
-            </p>
+            <p class="plan-fine">Best for: rooftops that want the full funnel.</p>
           </article>
         </div>
 
@@ -155,6 +300,11 @@
             we’ll scope it with your corporate team.
           </p>
         </div>
+
+        <p class="pricing-disclaimer">
+          <strong>Note:</strong> Features marked <span class="chip chip-roadmap">Planned</span> are on the roadmap.
+          During onboarding, we’ll confirm what’s live for your pilot and what’s scheduled next.
+        </p>
       </div>
     </section>
 
